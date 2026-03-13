@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   description: "VoltLabs designs and manufactures innovative IoT hardware devices that power the connected world. From smart sensors to industrial automation, we build the future of connected technology.",
   keywords: ["VoltLabs", "IoT", "hardware", "smart devices", "sensors", "embedded systems", "industrial IoT", "connected devices"],
   authors: [{ name: "VoltLabs" }],
+  icons: {
+    icon: "/logo-icon.png",
+    shortcut: "/logo-icon.png",
+    apple: "/logo-icon.png",
+  },
   openGraph: {
     title: "VoltLabs | Smart IoT Hardware Solutions",
     description: "Designing innovative IoT hardware that powers the connected world",
