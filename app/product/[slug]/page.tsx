@@ -325,7 +325,7 @@ export default async function ProductPage({
                   Buy on Amazon
                 </a>
                 <a
-                  href="https://wa.me/918178902630?text=Hi%20VoltLabs!%20I%20want%20to%20know%20more%20about%20the%20Modern%20Spiral%20Table%20Lamp"
+                  href={`https://wa.me/918178902630?text=Hi%20VoltLabs!%20I%20want%20to%20know%20more%20about%20the%20${encodeURIComponent(product.name)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white px-8 py-4 rounded-full font-semibold text-lg transition-all"

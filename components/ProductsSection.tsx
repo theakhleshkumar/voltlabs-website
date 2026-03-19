@@ -17,13 +17,13 @@ const ProductsSection = () => {
     {
       slug: "smart-table-touch-lamp",
       name: "Smart Table Touch Lamp",
-      description: "Smart Table Lamp | Smart LED Touch Control Bedside Lamp | 3-Way Dimmable Modern Table Light for Bedroom, Study & Living Room | Compact, Stylish, Adjustable Brightness Night Lamp for Home Décor",
+      description: "Smart LED Touch Control Bedside Lamp | 3-Way Dimmable (10%, 50%, 100%) | Compact, Stylish, Modern Table Light for Bedroom, Study & Living Room",
       price: "₹799",
       originalPrice: "₹2,999",
       image: "/product-lamp-warm.jpg",
       badge: "New",
-      features: ["Smart Lamp", "Night Lamp", "Table Lamp", "Touch Control", "3-Way Dimmable", "Adjustable Brightness", "Home Décor"],
-      buyLink: "https://amzn.in/d/0j5ybKT7"
+      features: ["3-Way Dimming", "Touch Control", "LED", "Energy Efficient", "Made in India"],
+      buyLink: "https://www.amazon.in/dp/B0FXVM966H"
     },
     {
       slug: "modern-spiral-table-lamp",
