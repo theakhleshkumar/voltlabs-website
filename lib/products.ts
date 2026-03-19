@@ -18,6 +18,7 @@ export interface Product {
     label: string;
     value: string;
   }[];
+  aboutPoints?: string[];
   buyLink: string;
   inStock: boolean;
   rating: number;
@@ -89,32 +90,49 @@ export const products: Product[] = [
     slug: "modern-spiral-table-lamp",
     name: "Modern Spiral Table Lamp",
     shortDescription: "Elegant Spiral Design with 3 Light Modes - Warm, Cool & Natural White",
-    description: "Make a statement with our Modern Spiral Table Lamp – a perfect blend of art and functionality. The unique spiral design creates a mesmerizing visual effect while providing soft, ambient lighting. Choose from 3 light modes (Warm White, Cool White, and Natural White) to match your mood and activity. Features standard E27 LED bulb compatibility for easy replacement and energy efficiency. Ideal as a centerpiece for your bedroom, living room, or as an elegant home décor accent.",
-    price: 799,
+    description: "Transform your space with this elegant modern spiral table lamp featuring three adjustable light modes — Warm White, Cool White and Natural White. Designed to create a calming ambience, this lamp uses an E27 LED bulb to deliver smooth, flicker-free illumination that enhances any room. Its contemporary spiral pattern adds a stylish touch to bedrooms, living rooms, study tables and workspaces. Choose warm light for a cozy vibe, cool white for clarity during work, or natural white for balanced everyday lighting. Perfect for reading, night-time glow, home décor styling and aesthetic room setups. Made with a sturdy base and premium finish, this lamp is energy-efficient, long-lasting and ideal for modern homes. It also makes a thoughtful gift for house-warmings and festive occasions.",
+    price: 749,
     originalPrice: 1499,
     currency: "INR",
     images: ["/product-lamp-spiral.jpg"],
     badge: "Premium",
-    features: ["Night Lamp", "Spiral Design", "3 Light Modes", "Warm White", "Cool White", "Natural White", "E27 LED", "Home Décor"],
+    features: ["3 Light Modes", "E27 LED Bulb", "Touch Switch", "Energy Efficient", "Flicker-Free", "Made in India", "Modern Design", "Gift Ready"],
     highlights: [
-      { icon: "design", title: "Unique Spiral Design", description: "Eye-catching sculptural design that doubles as décor" },
-      { icon: "modes", title: "3 Light Modes", description: "Warm, Cool, and Natural White options" },
-      { icon: "bulb", title: "E27 LED Compatible", description: "Standard bulb fitting - easy to replace" },
+      { icon: "modes", title: "3 Light Modes", description: "Warm White, Cool White & Natural White for every mood" },
+      { icon: "bulb", title: "E27 LED Bulb", description: "Smooth, flicker-free eye-friendly lighting included" },
+      { icon: "touch", title: "Touch Control", description: "Easy touch switch operation - no buttons needed" },
       { icon: "warranty", title: "1 Year Warranty", description: "Full manufacturer warranty coverage" }
     ],
     specifications: [
-      { label: "Power Source", value: "AC 220V" },
+      { label: "Power Source", value: "Corded Electric (240V)" },
       { label: "Light Modes", value: "Warm, Cool, Natural White" },
       { label: "Bulb Type", value: "E27 LED (included)" },
-      { label: "Material", value: "Premium Acrylic + Metal Base" },
-      { label: "Dimensions", value: "30cm (H) x 12cm (Base)" },
-      { label: "Suitable For", value: "Bedroom, Living Room, Office" },
+      { label: "Wattage", value: "12 Watts" },
+      { label: "Switch Type", value: "Touch" },
+      { label: "Base Material", value: "Plastic (Matte Finish)" },
+      { label: "Shade Material", value: "Glass" },
+      { label: "Shade Colour", value: "White" },
+      { label: "Dimensions", value: "17D × 17W × 23H cm" },
+      { label: "Weight", value: "250 Grams" },
+      { label: "Style", value: "Modern Spiral" },
+      { label: "Suitable For", value: "Bedroom, Living Room, Study, Office" },
+      { label: "Country of Origin", value: "India" },
       { label: "Warranty", value: "1 Year" }
     ],
-    buyLink: "https://amzn.in/d/080TItzR",
+    aboutPoints: [
+      "Modern Spiral Design – Stylish contemporary pattern that enhances home décor. Adds a premium aesthetic touch to nightstands, side tables and workspaces.",
+      "3 Light Modes for Every Mood – Choose between Warm White, Cool White and Natural White to match reading, relaxation or work needs. Perfect for bedrooms, living rooms and study tables.",
+      "Versatile Placement – Compact yet striking design makes it suitable for bedside tables, office desks, or living room side tables.",
+      "Modern Aesthetic – Sculptural spiral pattern adds visual interest and creates beautiful light diffusion patterns.",
+      "Sturdy & Compact Build – Strong base prevents wobbling, making it safe for homes with kids or pets. Lightweight yet durable design fits easily in any room setup.",
+      "Soft & Flicker-Free Light – E27 LED bulb ensures smooth, eye-friendly lighting. Ideal for nighttime use, ambience creation and mood lighting.",
+      "Energy Efficient & Long Lasting – LED technology consumes less power while offering a longer lifespan. Perfect for everyday use with minimal maintenance.",
+      "Perfect Gift Choice – Ideal for birthdays, housewarming, festive gifts and modern home setups. A premium décor accessory for friends, family and office spaces."
+    ],
+    buyLink: "https://www.amazon.in/dp/B0G3KYT8ZR",
     inStock: true,
-    rating: 4.7,
-    reviewCount: 203
+    rating: 4.4,
+    reviewCount: 2
   }
 ];
 

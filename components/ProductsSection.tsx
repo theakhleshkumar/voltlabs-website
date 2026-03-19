@@ -28,13 +28,13 @@ const ProductsSection = () => {
     {
       slug: "modern-spiral-table-lamp",
       name: "Modern Spiral Table Lamp",
-      description: "Modern Spiral Table Lamp with 3 Light Modes (Warm, Cool & Natural White) | E27 LED Bedside Night Lamp for Bedroom, Living Room & Home Décor | Soft Ambient Lighting",
-      price: "₹799",
+      description: "Modern Spiral Table Lamp with 3 Light Modes (Warm, Cool & Natural White) | E27 LED Bedside Night Lamp for Bedroom, Living Room & Home Décor | Touch Switch | Flicker-Free",
+      price: "₹749",
       originalPrice: "₹1,499",
       image: "/product-lamp-spiral.jpg",
       badge: "Premium",
-      features: ["Night Lamp", "Spiral", "3 Light Modes", "Warm", "Cool", "Natural White", "E27 LED", "Home Décor"],
-      buyLink: "https://amzn.in/d/080TItzR"
+      features: ["3 Light Modes", "E27 LED", "Touch Switch", "Flicker-Free", "Made in India"],
+      buyLink: "https://www.amazon.in/dp/B0G3KYT8ZR"
     }
   ];
 

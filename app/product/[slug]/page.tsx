@@ -379,6 +379,25 @@ export default async function ProductPage({
           </div>
         </section>
 
+        {/* About This Product - Feature Points */}
+        {product.aboutPoints && product.aboutPoints.length > 0 && (
+          <section className="max-w-7xl mx-auto px-6 mt-16">
+            <div className="bg-white border border-gray-100 rounded-3xl p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">About This Product</h2>
+              <ul className="space-y-4">
+                {product.aboutPoints.map((point, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <svg className="w-6 h-6 text-[#EAA832] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-600 leading-relaxed">{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <section className="max-w-7xl mx-auto px-6 mt-16">
