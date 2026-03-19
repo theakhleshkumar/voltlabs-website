@@ -1,8 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const ProductsSection = () => {
   const products = [
     {
+      slug: "smart-table-rgb-touch-lamp",
       name: "Smart Table RGB Touch Lamp",
       description: "Touch Sensor Table Lamp, RGB Color Changing Night Light, 7 Colors, USB Powered, Bedside and Desk Light with Tap Control",
       price: "₹799",
@@ -13,6 +15,7 @@ const ProductsSection = () => {
       buyLink: "https://amzn.in/d/080TItzR"
     },
     {
+      slug: "smart-table-touch-lamp",
       name: "Smart Table Touch Lamp",
       description: "Smart Table Lamp | Smart LED Touch Control Bedside Lamp | 3-Way Dimmable Modern Table Light for Bedroom, Study & Living Room | Compact, Stylish, Adjustable Brightness Night Lamp for Home Décor",
       price: "₹799",
@@ -23,6 +26,7 @@ const ProductsSection = () => {
       buyLink: "https://amzn.in/d/0j5ybKT7"
     },
     {
+      slug: "modern-spiral-table-lamp",
       name: "Modern Spiral Table Lamp",
       description: "Modern Spiral Table Lamp with 3 Light Modes (Warm, Cool & Natural White) | E27 LED Bedside Night Lamp for Bedroom, Living Room & Home Décor | Soft Ambient Lighting",
       price: "₹799",
@@ -53,8 +57,8 @@ const ProductsSection = () => {
               key={index}
               className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col"
             >
-              <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 p-8">
-                <span className="absolute top-4 left-4 bg-[#EAA832] text-white text-xs font-bold px-3 py-1 rounded-full">
+              <Link href={`/product/${product.slug}`} className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 p-8">
+                <span className="absolute top-4 left-4 bg-[#EAA832] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                   {product.badge}
                 </span>
                 <Image
@@ -63,13 +67,15 @@ const ProductsSection = () => {
                   fill
                   className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </Link>
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
+                <Link href={`/product/${product.slug}`}>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 hover:text-[#EAA832] transition-colors">{product.name}</h3>
+                </Link>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {product.features.map((feature, i) => (
+                  {product.features.slice(0, 4).map((feature, i) => (
                     <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
                       {feature}
                     </span>
@@ -81,14 +87,22 @@ const ProductsSection = () => {
                     <span className="text-2xl font-bold text-[#EAA832]">{product.price}</span>
                     <span className="text-sm text-gray-400 line-through">{product.originalPrice}</span>
                   </div>
-                  <a 
-                    href={product.buyLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-gray-900 hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
-                  >
-                    Buy Now
-                  </a>
+                  <div className="flex gap-2">
+                    <Link 
+                      href={`/product/${product.slug}`}
+                      className="border border-gray-300 hover:border-[#EAA832] text-gray-700 hover:text-[#EAA832] px-3 py-2 rounded-full text-sm font-semibold transition-colors"
+                    >
+                      Details
+                    </Link>
+                    <a 
+                      href={product.buyLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-gray-900 hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+                    >
+                      Buy Now
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
