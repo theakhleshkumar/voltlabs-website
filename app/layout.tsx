@@ -87,9 +87,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://voltlabs.in",
   },
-  verification: {
-    google: "your-google-verification-code",
-  },
   category: "Electronics",
 };
 
