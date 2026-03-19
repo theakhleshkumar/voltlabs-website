@@ -28,7 +28,7 @@ const Footer = () => (
         <div>
           <h4 className="text-white font-semibold mb-6">Products</h4>
           <ul className="space-y-4">
-            {["Smart Lamps", "RGB Lights", "Table Lamps", "Night Lights", "Coming Soon"].map((item) => (
+            {["RGB Touch Lamp", "Table Touch Lamp", "Spiral Table Lamp", "Coming Soon"].map((item) => (
               <li key={item}>
                 <a href="#products" className="text-gray-400 hover:text-[#EAA832] transition-colors">{item}</a>
               </li>
@@ -39,30 +39,38 @@ const Footer = () => (
         <div>
           <h4 className="text-white font-semibold mb-6">Support</h4>
           <ul className="space-y-4">
-            {["FAQ", "Shipping Info", "Returns", "Warranty", "Contact Us"].map((item) => (
-              <li key={item}>
-                <a href="#faq" className="text-gray-400 hover:text-[#EAA832] transition-colors">{item}</a>
-              </li>
-            ))}
+            <li>
+              <a href="#faq" className="text-gray-400 hover:text-[#EAA832] transition-colors">FAQ</a>
+            </li>
+            <li>
+              <a href="#contact" className="text-gray-400 hover:text-[#EAA832] transition-colors">Contact Us</a>
+            </li>
+            <li>
+              <Link href="/refund-policy" className="text-gray-400 hover:text-[#EAA832] transition-colors">Refund Policy</Link>
+            </li>
+            <li>
+              <Link href="/terms-of-service" className="text-gray-400 hover:text-[#EAA832] transition-colors">Terms of Service</Link>
+            </li>
+            <li>
+              <Link href="/privacy-policy" className="text-gray-400 hover:text-[#EAA832] transition-colors">Privacy Policy</Link>
+            </li>
           </ul>
         </div>
         
         <div>
-          <h4 className="text-white font-semibold mb-6">Newsletter</h4>
-          <p className="text-gray-400 mb-4">Get updates on new products and offers.</p>
+          <h4 className="text-white font-semibold mb-6">Get 5% Off On Your First Order</h4>
+          <p className="text-gray-400 mb-4">Join to get exclusive deals and early access to smart device launches.</p>
           <form className="flex gap-2">
             <input 
               type="email" 
-              placeholder="Your email"
+              placeholder="Enter your email"
               className="flex-1 px-4 py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-500 focus:border-[#EAA832] outline-none transition-all"
             />
             <button 
               type="submit"
               className="bg-[#EAA832] hover:bg-[#D4922A] text-white px-4 py-3 rounded-lg transition-all"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+              Get Discount
             </button>
           </form>
         </div>
