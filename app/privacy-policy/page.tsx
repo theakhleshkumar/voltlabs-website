@@ -1,9 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Privacy Policy | VoltLabs",
-  description: "VoltLabs Privacy Policy - Learn how we collect, use, and protect your personal information.",
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "VoltLabs Privacy Policy - Learn how we collect, use, and protect your personal information. GDPR & CCPA compliant.",
+  alternates: {
+    canonical: "https://voltlabs.in/privacy-policy",
+  },
+  openGraph: {
+    title: "Privacy Policy | VoltLabs",
+    description: "Learn how VoltLabs collects, uses, and protects your personal information.",
+    url: "https://voltlabs.in/privacy-policy",
+    type: "website",
+  },
 };
 
 // Navigation Component

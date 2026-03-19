@@ -775,21 +775,156 @@ const WhatsAppButton = () => (
   </a>
 );
 
+// JSON-LD Structured Data
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://voltlabs.in/#organization",
+      "name": "VoltLabs",
+      "url": "https://voltlabs.in",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://voltlabs.in/logo-icon.png",
+        "width": 512,
+        "height": 512
+      },
+      "description": "VoltLabs designs affordable smart home IoT products including WiFi-connected touch lamps, RGB lights, and table lamps for Indian homes.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "New Delhi",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-8178902630",
+        "contactType": "customer service",
+        "email": "care@voltlabs.in",
+        "availableLanguage": ["English", "Hindi"]
+      },
+      "sameAs": [
+        "https://www.amazon.in/stores/VoltLabs/page/417214B6-FD85-46C7-89D4-401DFC5C7732"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://voltlabs.in/#website",
+      "url": "https://voltlabs.in",
+      "name": "VoltLabs",
+      "description": "Smart Home IoT Products - Touch Lamps & RGB Lights",
+      "publisher": {
+        "@id": "https://voltlabs.in/#organization"
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "Smart Table RGB Touch Lamp",
+      "image": "https://m.media-amazon.com/images/I/71IkWE4RHGL._SL1500_.jpg",
+      "description": "16M+ colors LED RGB touch-sensitive table lamp with app & voice control. Perfect for bedroom, living room, and gifting.",
+      "brand": {
+        "@type": "Brand",
+        "name": "VoltLabs"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://amzn.in/d/080TItzR",
+        "priceCurrency": "INR",
+        "price": "799",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "VoltLabs"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.5",
+        "reviewCount": "50"
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "Modern Spiral Table Lamp",
+      "image": "https://m.media-amazon.com/images/I/61VPmbKqFGL._SL1500_.jpg",
+      "description": "Elegant spiral design table lamp with warm lighting. Touch-sensitive controls, modern decor piece for any room.",
+      "brand": {
+        "@type": "Brand",
+        "name": "VoltLabs"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://amzn.in/d/0j5ybKT7",
+        "priceCurrency": "INR",
+        "price": "799",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "VoltLabs"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I connect the lamp to my phone?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply download the VoltLabs app from Play Store or App Store, plug in your lamp, and follow the in-app setup. It takes less than 2 minutes to connect via WiFi."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the warranty period?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All VoltLabs products come with a 1-year manufacturer warranty. If you face any issues, our support team will help you with repair or replacement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use the lamp without the app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely! All our lamps have touch controls for basic functions like on/off and brightness. The app unlocks advanced features like colors, schedules, and scenes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you offer Cash on Delivery?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we offer COD across India. You can also pay online via UPI, cards, or net banking for faster processing."
+          }
+        }
+      ]
+    }
+  ]
+};
+
 export default function Home() {
   return (
-    <main className="overflow-hidden">
-      <Header />
-      <HeroSection />
-      <ProductsSection />
-      <FeaturesSection />
-      <AboutSection />
-      <HowItWorksSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <CTASection />
-      <ContactSection />
-      <Footer />
-      <WhatsAppButton />
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="overflow-hidden">
+        <Header />
+        <HeroSection />
+        <ProductsSection />
+        <FeaturesSection />
+        <AboutSection />
+        <HowItWorksSection />
+        <TestimonialsSection />
+        <FAQSection />
+        <CTASection />
+        <ContactSection />
+        <Footer />
+        <WhatsAppButton />
+      </main>
+    </>
   );
 }

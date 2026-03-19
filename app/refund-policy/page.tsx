@@ -1,9 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Refund Policy | VoltLabs",
-  description: "VoltLabs Refund Policy - Learn about our returns, refunds, exchanges, and cancellation policies.",
+export const metadata: Metadata = {
+  title: "Refund Policy",
+  description: "VoltLabs Refund Policy - Easy returns within 7 days, hassle-free refunds, and exchange policies for smart home products.",
+  alternates: {
+    canonical: "https://voltlabs.in/refund-policy",
+  },
+  openGraph: {
+    title: "Refund Policy | VoltLabs",
+    description: "Easy returns within 7 days, hassle-free refunds, and exchange policies.",
+    url: "https://voltlabs.in/refund-policy",
+    type: "website",
+  },
 };
 
 // Navigation Component

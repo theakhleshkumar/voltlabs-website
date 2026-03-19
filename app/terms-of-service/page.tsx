@@ -1,9 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Terms of Service | VoltLabs",
-  description: "VoltLabs Terms of Service - Terms and conditions for using our website, products, and services.",
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "VoltLabs Terms of Service - Terms and conditions for using our website, products, and smart home IoT services.",
+  alternates: {
+    canonical: "https://voltlabs.in/terms-of-service",
+  },
+  openGraph: {
+    title: "Terms of Service | VoltLabs",
+    description: "Terms and conditions for using VoltLabs website, products, and services.",
+    url: "https://voltlabs.in/terms-of-service",
+    type: "website",
+  },
 };
 
 // Navigation Component
