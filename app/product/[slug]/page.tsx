@@ -33,6 +33,14 @@ export async function generateMetadata({
       images: [{ url: product.images[0], width: 800, height: 800, alt: product.name }],
       type: "website",
       url: `https://voltlabs.in/product/${product.slug}`,
+      siteName: "VoltLabs",
+      locale: "en_IN",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} | VoltLabs`,
+      description: product.shortDescription,
+      images: [product.images[0]],
     },
     alternates: {
       canonical: `https://voltlabs.in/product/${product.slug}`,
@@ -151,13 +159,14 @@ export default async function ProductPage({
   const relatedProducts = getRelatedProducts(slug);
   const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
 
-  // JSON-LD for product
+  // JSON-LD for product (Schema.org structured data)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
     "image": product.images.map(img => `https://voltlabs.in${img}`),
     "description": product.description,
+    "sku": product.slug,
     "brand": {
       "@type": "Brand",
       "name": "VoltLabs"
@@ -167,15 +176,46 @@ export default async function ProductPage({
       "url": `https://voltlabs.in/product/${product.slug}`,
       "priceCurrency": "INR",
       "price": product.price,
+      "priceValidUntil": "2026-12-31",
       "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition",
       "seller": {
         "@type": "Organization",
         "name": "VoltLabs"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "IN"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 1,
+            "maxValue": 2,
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 3,
+            "maxValue": 7,
+            "unitCode": "DAY"
+          }
+        },
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": 0,
+          "currency": "INR"
+        }
       }
     },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": product.rating,
+      "bestRating": 5,
+      "worstRating": 1,
       "reviewCount": product.reviewCount
     }
   };
