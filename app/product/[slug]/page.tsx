@@ -209,6 +209,19 @@ export default async function ProductPage({
           "value": 0,
           "currency": "INR"
         }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "IN",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 7,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn",
+        "returnPolicySeasonalOverride": {
+          "@type": "MerchantReturnPolicySeasonalOverride",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 7
+        }
       }
     },
     "aggregateRating": {
