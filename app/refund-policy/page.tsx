@@ -152,7 +152,7 @@ export default function RefundPolicy() {
               <h3 className="text-xl font-semibold text-gray-800 mb-3">5.1 How to Request a Refund</h3>
               <p className="text-gray-600 leading-relaxed mb-4">To initiate a return/refund:</p>
               <ol className="list-decimal pl-6 text-gray-600 space-y-3 mb-6">
-                <li><strong>Contact Us:</strong> Send an email to care@voltlabs.in with your order number, product details, and reason for return.</li>
+                <li><strong>Contact Us:</strong> Send an email to support@voltlabs.in with your order number, product details, and reason for return.</li>
                 <li><strong>Receive Approval:</strong> Our team will review your request and respond within 24-48 hours with return instructions.</li>
                 <li><strong>Pack the Product:</strong> Safely pack the product in its original packaging with all accessories.</li>
                 <li><strong>Ship the Product:</strong> Ship the product to our designated address (provided in approval email).</li>
@@ -212,7 +212,7 @@ export default function RefundPolicy() {
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">6.2 Exchange Process</h3>
               <p className="text-gray-600 leading-relaxed">
-                Contact care@voltlabs.in with your exchange request. If the new product costs more, you&apos;ll need to pay the difference. If it costs less, the difference will be refunded.
+                Contact support@voltlabs.in with your exchange request. If the new product costs more, you&apos;ll need to pay the difference. If it costs less, the difference will be refunded.
               </p>
             </section>
 
@@ -228,7 +228,7 @@ export default function RefundPolicy() {
                 <li>Do NOT accept the delivery if the outer packaging is visibly damaged</li>
                 <li>If damage is discovered after opening, report within 48 hours</li>
                 <li>Take photos of the damage, packaging, and shipping label</li>
-                <li>Email photos and order details to care@voltlabs.in</li>
+                <li>Email photos and order details to support@voltlabs.in</li>
                 <li>We will arrange a free replacement or full refund</li>
               </ul>
 
@@ -253,7 +253,7 @@ export default function RefundPolicy() {
               </p>
               <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-6">
                 <li>Full refund will be processed to original payment method</li>
-                <li>Cancellation can be requested via email to care@voltlabs.in</li>
+                <li>Cancellation can be requested via email to support@voltlabs.in</li>
                 <li>Please include your order number in the cancellation request</li>
               </ul>
 
@@ -282,7 +282,7 @@ export default function RefundPolicy() {
                 <li>Amazon&apos;s return window and conditions apply</li>
               </ul>
               <p className="text-gray-600 leading-relaxed">
-                For warranty-related issues on Amazon purchases, you may contact us directly at care@voltlabs.in with your Amazon order ID.
+                For warranty-related issues on Amazon purchases, you may contact us directly at support@voltlabs.in with your Amazon order ID.
               </p>
             </section>
 
@@ -293,7 +293,7 @@ export default function RefundPolicy() {
                 If you disagree with our refund decision:
               </p>
               <ol className="list-decimal pl-6 text-gray-600 space-y-2">
-                <li>Email care@voltlabs.in with your concerns and supporting documentation</li>
+                <li>Email support@voltlabs.in with your concerns and supporting documentation</li>
                 <li>Our senior team will review within 5 business days</li>
                 <li>Final decision will be communicated via email</li>
                 <li>If unresolved, disputes are subject to the jurisdiction of courts in New Delhi, India</li>
@@ -308,7 +308,7 @@ export default function RefundPolicy() {
               </p>
               <div className="bg-gray-50 rounded-2xl p-6">
                 <p className="text-gray-700 mb-2"><strong>VoltLabs Customer Support</strong></p>
-                <p className="text-gray-600">Email: care@voltlabs.in</p>
+                <p className="text-gray-600">Email: support@voltlabs.in</p>
                 <p className="text-gray-600">Phone: +91 8178902630</p>
                 <p className="text-gray-600">WhatsApp: +91 8178902630</p>
                 <p className="text-gray-600 mt-3"><strong>Business Hours:</strong></p>

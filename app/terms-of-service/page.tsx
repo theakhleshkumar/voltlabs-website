@@ -245,7 +245,7 @@ export default function TermsOfService() {
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">8.3 Warranty Claims</h3>
               <p className="text-gray-600 leading-relaxed">
-                To make a warranty claim, contact our support team at care@voltlabs.in with your proof of purchase. Valid claims will be resolved through repair or replacement at our discretion.
+                To make a warranty claim, contact our support team at support@voltlabs.in with your proof of purchase. Valid claims will be resolved through repair or replacement at our discretion.
               </p>
             </section>
 
@@ -311,7 +311,7 @@ export default function TermsOfService() {
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3">12.3 Informal Resolution</h3>
               <p className="text-gray-600 leading-relaxed">
-                Before filing any formal dispute, you agree to contact us at care@voltlabs.in to attempt to resolve the matter informally within 30 days.
+                Before filing any formal dispute, you agree to contact us at support@voltlabs.in to attempt to resolve the matter informally within 30 days.
               </p>
             </section>
 
@@ -348,10 +348,10 @@ export default function TermsOfService() {
               </p>
               <div className="bg-gray-50 rounded-2xl p-6">
                 <p className="text-gray-700 mb-2"><strong>VoltLabs</strong></p>
-                <p className="text-gray-600">Email: care@voltlabs.in</p>
+                <p className="text-gray-600">Email: support@voltlabs.in</p>
                 <p className="text-gray-600">Phone: +91 8178902630</p>
                 <p className="text-gray-600">WhatsApp: +91 8178902630</p>
-                <p className="text-gray-600">Address: KH NO 242 Ground Floor, Naya Lal Dora Bans, Near SDM Office, New Delhi, North West Delhi, Delhi - 110081</p>
+                <p className="text-gray-600">Address: Barrod, Barrod Sub Post Office, Kankara Barrod, Barrod, Kotputli-Behror - 301020 India (IN)</p>
               </div>
             </section>
 

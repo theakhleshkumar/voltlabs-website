@@ -574,7 +574,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">Email us at</div>
-                  <div className="font-semibold text-gray-900">care@voltlabs.in</div>
+                    <div className="font-semibold text-gray-900">support@voltlabs.in</div>
                 </div>
               </div>
               
@@ -599,7 +599,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <div className="text-sm text-gray-500">Office Address</div>
-                  <div className="font-semibold text-gray-900 text-sm">KH NO 242, Naya Lal Dora Bans, Near SDM Office, New Delhi - 110081</div>
+                  <div className="font-semibold text-gray-900 text-sm">Barrod, Barrod Sub Post Office, Kankara Barrod, Barrod,<br/>Kotputli-Behror - 301020 India (IN)</div>
                 </div>
               </div>
             </div>
@@ -793,14 +793,17 @@ const jsonLd = {
       "description": "VoltLabs designs affordable smart home IoT products including WiFi-connected touch lamps, RGB lights, and table lamps for Indian homes.",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "New Delhi",
+        "streetAddress": "Barrod Sub Post Office, Kankara Barrod",
+        "addressLocality": "Barrod",
+        "addressRegion": "Kotputli-Behror",
+        "postalCode": "301020",
         "addressCountry": "IN"
       },
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+91-8178902630",
         "contactType": "customer service",
-        "email": "care@voltlabs.in",
+        "email": "support@voltlabs.in",
         "availableLanguage": ["English", "Hindi"]
       },
       "sameAs": [

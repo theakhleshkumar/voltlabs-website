@@ -266,7 +266,7 @@ export default function PrivacyPolicy() {
                 <li>Right to non-discrimination for exercising privacy rights</li>
               </ul>
               <p className="text-gray-600 leading-relaxed mt-4">
-                <strong>We do not sell your personal information.</strong> To exercise your CCPA rights, contact us at care@voltlabs.in.
+                <strong>We do not sell your personal information.</strong> To exercise your CCPA rights, contact us at support@voltlabs.in.
               </p>
             </section>
 
@@ -274,7 +274,7 @@ export default function PrivacyPolicy() {
             <section className="mb-10">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">10. Children&apos;s Privacy</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Our products and services are not intended for children under the age of 13 (or 16 in the EEA). We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a child, please contact us immediately at care@voltlabs.in, and we will take steps to delete such information.
+                Our products and services are not intended for children under the age of 13 (or 16 in the EEA). We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a child, please contact us immediately at support@voltlabs.in, and we will take steps to delete such information.
               </p>
               <p className="text-gray-600 leading-relaxed">
                 This policy is compliant with the Children&apos;s Online Privacy Protection Act (COPPA) and similar international regulations.
@@ -365,12 +365,12 @@ export default function PrivacyPolicy() {
               </p>
               <div className="bg-gray-50 rounded-2xl p-6">
                 <p className="text-gray-700 mb-2"><strong>VoltLabs Privacy Team</strong></p>
-                <p className="text-gray-600">Email: care@voltlabs.in</p>
+                <p className="text-gray-600">Email: support@voltlabs.in</p>
                 <p className="text-gray-600">Phone: +91 8178902630</p>
-                <p className="text-gray-600">Address: KH NO 242 Ground Floor, Naya Lal Dora Bans, Near SDM Office, New Delhi, North West Delhi, Delhi - 110081</p>
+                <p className="text-gray-600">Address: Barrod, Barrod Sub Post Office, Kankara Barrod, Barrod, Kotputli-Behror - 301020 India (IN)</p>
               </div>
               <p className="text-gray-600 leading-relaxed mt-4">
-                For data protection inquiries in the EU, you may also contact our Data Protection Officer at care@voltlabs.in.
+                For data protection inquiries in the EU, you may also contact our Data Protection Officer at support@voltlabs.in.
               </p>
             </section>
 
