@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import Script from "next/script";
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductsSection from "@/components/ProductsSection";
+import { WEB3FORMS_ACCESS_KEY, resetCaptcha } from "@/lib/web3forms";
 
 // Hero Section
 const HeroSection = () => (
@@ -504,7 +506,7 @@ const ContactSection = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error' | 'captcha'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({
@@ -513,8 +515,19 @@ const ContactSection = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Honeypot: real users never see or tick this box; bots auto-filling the
+    // form do, and Web3Forms silently discards submissions with botcheck=true
+    const botcheck = (e.currentTarget.elements.namedItem('botcheck') as HTMLInputElement | null)?.checked ?? false;
+    // When the hCaptcha widget has rendered, require it to be solved. If the
+    // widget failed to load (e.g. blocked), submit without it and let the
+    // server decide.
+    const captchaField = e.currentTarget.querySelector('textarea[name="h-captcha-response"]') as HTMLTextAreaElement | null;
+    if (captchaField && !captchaField.value) {
+      setSubmitStatus('captcha');
+      return;
+    }
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -525,8 +538,10 @@ const ContactSection = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          access_key: '28e97e7e-c64b-41c6-b0b2-7bc36a1ca985',
+          access_key: WEB3FORMS_ACCESS_KEY,
           ...formData,
+          botcheck,
+          'h-captcha-response': captchaField?.value,
           from_name: 'VoltLabs Website Contact Form',
         }),
       });
@@ -548,6 +563,7 @@ const ContactSection = () => {
     } catch {
       setSubmitStatus('error');
     } finally {
+      resetCaptcha();
       setIsSubmitting(false);
     }
   };
@@ -660,7 +676,29 @@ const ContactSection = () => {
               </div>
             )}
 
+            {/* Captcha Warning */}
+            {submitStatus === 'captcha' && (
+              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl flex items-center gap-3">
+                <svg className="w-6 h-6 text-yellow-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="font-semibold text-yellow-800">Please complete the captcha</p>
+                  <p className="text-sm text-yellow-600">Tick the &quot;I am human&quot; box before sending your message.</p>
+                </div>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot field for spam bots - hidden from real users */}
+              <input
+                type="checkbox"
+                name="botcheck"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hidden"
+              />
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
@@ -730,8 +768,11 @@ const ContactSection = () => {
                   placeholder="How can we help you?"
                 />
               </div>
-              
-              <button 
+
+              {/* hCaptcha widget, rendered by the Web3Forms client script */}
+              <div className="h-captcha" data-captcha="true" />
+
+              <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full bg-[#EAA832] hover:bg-[#D4922A] disabled:bg-[#EAA832]/50 disabled:cursor-not-allowed text-white py-4 rounded-xl font-semibold text-lg transition-all hover:shadow-lg hover:shadow-[#EAA832]/30 flex items-center justify-center gap-2"
@@ -912,8 +953,10 @@ export default function Home() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
+      {/* Renders the hCaptcha widgets in the contact and newsletter forms */}
+      <Script src="https://web3forms.com/client/script.js" strategy="afterInteractive" />
       <main className="overflow-hidden">
         <Header />
         <HeroSection />

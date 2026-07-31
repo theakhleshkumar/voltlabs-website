@@ -1,5 +1,108 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { WEB3FORMS_ACCESS_KEY, resetCaptcha } from "@/lib/web3forms";
+
+const NewsletterForm = () => {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error' | 'captcha'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const botcheck = (e.currentTarget.elements.namedItem("botcheck") as HTMLInputElement | null)?.checked ?? false;
+    // When the hCaptcha widget has rendered, require it to be solved. If the
+    // widget failed to load (e.g. blocked), submit without it and let the
+    // server decide.
+    const captchaField = e.currentTarget.querySelector('textarea[name="h-captcha-response"]') as HTMLTextAreaElement | null;
+    if (captchaField && !captchaField.value) {
+      setStatus('captcha');
+      return;
+    }
+    setStatus('sending');
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          email,
+          botcheck,
+          "h-captcha-response": captchaField?.value,
+          subject: "Newsletter Signup - 5% Off First Order",
+          from_name: "VoltLabs Website Newsletter",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus('success');
+        setEmail("");
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    } finally {
+      resetCaptcha();
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        {/* Honeypot field for spam bots - hidden from real users */}
+        <input
+          type="checkbox"
+          name="botcheck"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="hidden"
+        />
+        <div className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Enter your email"
+            className="flex-1 min-w-0 px-4 py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-500 focus:border-[#EAA832] outline-none transition-all"
+          />
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="bg-[#EAA832] hover:bg-[#D4922A] disabled:bg-[#EAA832]/50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg transition-all"
+          >
+            {status === 'sending' ? 'Sending...' : 'Get Discount'}
+          </button>
+        </div>
+        {/* hCaptcha widget, rendered by the Web3Forms client script */}
+        <div className="h-captcha" data-captcha="true" data-size="compact" data-theme="dark" />
+      </form>
+      {status === 'success' && (
+        <p className="text-green-400 text-sm mt-3">
+          Thanks for subscribing! We&apos;ll email your discount code soon.
+        </p>
+      )}
+      {status === 'error' && (
+        <p className="text-red-400 text-sm mt-3">
+          Something went wrong. Please try again or contact us on WhatsApp.
+        </p>
+      )}
+      {status === 'captcha' && (
+        <p className="text-yellow-400 text-sm mt-3">
+          Please complete the captcha above to subscribe.
+        </p>
+      )}
+    </div>
+  );
+};
 
 const Footer = () => (
   <footer className="bg-gray-900 py-16">
@@ -60,19 +163,7 @@ const Footer = () => (
         <div>
           <h4 className="text-white font-semibold mb-6">Get 5% Off On Your First Order</h4>
           <p className="text-gray-400 mb-4">Join to get exclusive deals and early access to smart device launches.</p>
-          <form className="flex gap-2">
-            <input 
-              type="email" 
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-500 focus:border-[#EAA832] outline-none transition-all"
-            />
-            <button 
-              type="submit"
-              className="bg-[#EAA832] hover:bg-[#D4922A] text-white px-4 py-3 rounded-lg transition-all"
-            >
-              Get Discount
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
       
