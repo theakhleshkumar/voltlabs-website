@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 import { getProductBySlug, getRelatedProducts, getAllProductSlugs, Product } from "@/lib/products";
 
 // Generate static params for all products
@@ -122,7 +123,7 @@ const HighlightIcon = ({ type }: { type: string }) => {
 const RelatedProductCard = ({ product }: { product: Product }) => (
   <Link href={`/product/${product.slug}`} className="group">
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all">
-      <div className="relative aspect-square bg-gray-50 p-4">
+      <div data-theme-fixed className="relative aspect-square bg-gray-50 p-4">
         <Image
           src={product.images[0]}
           alt={product.name}
@@ -276,14 +277,17 @@ export default async function ProductPage({
                 Contact
               </Link>
             </nav>
-            <a
-              href={product.buyLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#EAA832] hover:bg-[#D4922A] text-white px-6 py-2 rounded-full font-semibold text-sm transition-colors"
-            >
-              Buy Now
-            </a>
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <a
+                href={product.buyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#EAA832] hover:bg-[#D4922A] text-white px-6 py-2 rounded-full font-semibold text-sm transition-colors"
+              >
+                Buy Now
+              </a>
+            </div>
           </div>
         </div>
       </header>
@@ -305,7 +309,7 @@ export default async function ProductPage({
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Product Images */}
             <div className="space-y-4">
-              <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 rounded-3xl overflow-hidden">
+              <div data-theme-fixed className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 rounded-3xl overflow-hidden">
                 <span className="absolute top-4 left-4 z-10 bg-[#EAA832] text-white text-sm font-bold px-4 py-1.5 rounded-full">
                   {product.badge}
                 </span>
@@ -482,7 +486,7 @@ export default async function ProductPage({
 
         {/* Final CTA */}
         <section className="max-w-4xl mx-auto px-6 mt-16">
-          <div className="bg-gradient-to-r from-[#EAA832] to-[#D4922A] rounded-3xl p-8 lg:p-12 text-center text-white">
+          <div data-theme-fixed className="bg-gradient-to-r from-[#EAA832] to-[#D4922A] rounded-3xl p-8 lg:p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">Ready to Light Up Your Space?</h2>
             <p className="text-white/90 mb-8 max-w-xl mx-auto">
               Order now and enjoy free shipping across India. Transform your home with VoltLabs smart lighting.
@@ -503,7 +507,7 @@ export default async function ProductPage({
       </main>
 
       {/* Simple Footer */}
-      <footer className="bg-gray-900 py-8">
+      <footer data-theme-fixed className="bg-gray-900 py-8">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">

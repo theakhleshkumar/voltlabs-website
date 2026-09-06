@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Drive Tailwind's `dark:` variant off the .dark class on <html> instead of
+   the OS media query, so the toggle can override the system preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #1a1a1a;
@@ -17,6 +21,105 @@
   --gray-700: #404040;
   --gray-800: #262626;
   --gray-900: #171717;
+
+  --surface: #ffffff;
+  --scrollbar-track: var(--gray-100);
+}
+
+/* ---- Dark theme ------------------------------------------------------ *
+ * The pages style themselves with literal Tailwind utilities (bg-white,
+ * text-gray-600, ...) rather than semantic ones, so instead of adding a
+ * `dark:` variant to some 460 class names, the theme flips the variables
+ * those utilities already compile down to: Tailwind v4 emits
+ * `.text-gray-600{color:var(--color-gray-600)}`, and every variant of it
+ * (hover:, focus:, group-hover:) reads the same variable. Redefining the
+ * variable therefore carries the whole ramp — base states and hover states
+ * alike — with no specificity fights.
+ *
+ * The grey ramp is remapped by *role*, not inverted: 500-900 are body-text
+ * shades and become light, 50-300 are surface/border shades and become dark.
+ * 400 is deliberately left alone — it reads as muted on either ground.
+ * `--color-white` is left alone too: `text-white` and `border-white` sit on
+ * brand-coloured chips that never flip, so `bg-white` is handled on its own
+ * below.                                                                   */
+.dark {
+  --background: #0b0e13;
+  --foreground: #e8ebf0;
+
+  /* surfaces and borders: light -> dark */
+  --color-gray-50: #0f131a;
+  --color-gray-100: #1d222b;
+  --color-gray-200: #2b313d;
+  --color-gray-300: #3a4250;
+
+  /* body text: dark -> light */
+  --color-gray-500: #8992a2;
+  --color-gray-600: #a4adbc;
+  --color-gray-700: #c7cedb;
+  --color-gray-800: #e2e7ee;
+  --color-gray-900: #f2f4f8;
+
+  /* tinted status chips */
+  --color-green-50: #0f2a1c;
+  --color-green-100: #173d28;
+  --color-red-50: #34161a;
+  --color-yellow-50: #322a12;
+
+  --surface: #14181f;
+  --scrollbar-track: #171c24;
+}
+
+/* Sections that are already dark or brand-coloured in light mode — the hero,
+   the about band, the orange CTAs, the footers, the product photo plates —
+   should look identical in both themes. Restoring the stock ramp inside them
+   opts their whole subtree out of the flip, inheritance doing the scoping. */
+.dark [data-theme-fixed] {
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5dc;
+  --color-gray-500: #6a7282;
+  --color-gray-600: #4a5565;
+  --color-gray-700: #364153;
+  --color-gray-800: #1e2939;
+  --color-gray-900: #101828;
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-red-50: #fef2f2;
+  --color-yellow-50: #fefce8;
+
+  --surface: #ffffff;
+}
+
+/* `bg-white` is the one utility that cannot ride on a variable: it shares
+   `--color-white` with `text-white` and `border-white`, which must stay
+   white. These few rules are unlayered so they beat Tailwind's `utilities`
+   layer — which also means any hover pairing on a `bg-white` element has to
+   be restated here, or the unlayered rule would win over the layered
+   `:hover`. The two below are the only such pairings in the codebase; adding
+   a `hover:bg-*` to a `bg-white` element in future means adding it here. */
+.bg-white { background-color: var(--surface); }
+.bg-white\/80 { background-color: color-mix(in srgb, var(--surface) 80%, transparent); }
+.bg-white\/90 { background-color: color-mix(in srgb, var(--surface) 90%, transparent); }
+.bg-white\/95 { background-color: color-mix(in srgb, var(--surface) 95%, transparent); }
+.hover\:bg-white:hover { background-color: var(--surface); }
+.hover\:bg-gray-100:hover { background-color: var(--color-gray-100); }
+
+/* Form controls that carry no background utility of their own would otherwise
+   keep the browser's white default. In `base` so an explicit bg-* utility
+   (the newsletter field, for one) still wins. */
+@layer base {
+  .dark input,
+  .dark textarea,
+  .dark select {
+    background-color: var(--surface);
+    color: var(--foreground);
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: var(--color-gray-500);
+  }
 }
 
 @theme inline {
@@ -37,6 +140,21 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Keep native UI (form controls, caret, default scrollbars) in step with the
+   chosen theme. Set as an attribute too so it applies before hydration. */
+html.dark {
+  color-scheme: dark;
+}
+
+/* Ease the page ground between themes. Deliberately limited to <body>: a
+   blanket transition would land on the `transition-*` utilities the cards and
+   buttons already use and retime their hover animations. */
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
 }
 
 /* Custom Animations */
@@ -79,7 +197,7 @@ html {
 
 /* Glass Effect */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -90,7 +208,7 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--gray-100);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {

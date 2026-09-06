@@ -10,7 +10,7 @@ import { WEB3FORMS_ACCESS_KEY, resetCaptcha } from "@/lib/web3forms";
 
 // Hero Section
 const HeroSection = () => (
-  <section className="min-h-screen flex items-center relative overflow-hidden pt-20">
+  <section data-theme-fixed className="min-h-screen flex items-center relative overflow-hidden pt-20">
     {/* Background Image */}
     <div className="absolute inset-0 z-0">
       <Image 
@@ -193,7 +193,7 @@ const FeaturesSection = () => {
 
 // About Section
 const AboutSection = () => (
-  <section id="about" className="py-24 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+  <section id="about" data-theme-fixed className="py-24 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
     <div className="max-w-7xl mx-auto px-6">
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-6">
@@ -465,7 +465,7 @@ const FAQSection = () => {
 
 // CTA Section
 const CTASection = () => (
-  <section className="py-24 bg-[#EAA832]">
+  <section data-theme-fixed className="py-24 bg-[#EAA832]">
     <div className="max-w-4xl mx-auto px-6 text-center">
       <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
         Ready to Make Your Home Smarter?

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,6 +35,8 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
+
             {/* Shop Now Button - Hidden on mobile, shown on tablet+ */}
             <a 
               href="https://www.amazon.in/stores/VoltLabs/page/417214B6-FD85-46C7-89D4-401DFC5C7732?lp_asin=B0FXVM966H&ref_=cm_sw_r_ud_ast_store_1G952ME5NPWS3TQPS3YH"

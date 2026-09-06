@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -24,12 +25,15 @@ const Navigation = () => (
         <Link href="/" className="flex items-center">
           <Image src="/logo-icon.png" alt="VoltLabs" width={40} height={40} className="w-10 h-10" />
         </Link>
-        <Link 
-          href="/"
-          className="text-gray-600 hover:text-[#EAA832] transition-colors font-medium"
-        >
-          ← Back to Home
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link
+            href="/"
+            className="text-gray-600 hover:text-[#EAA832] transition-colors font-medium"
+          >
+            ← Back to Home
+          </Link>
+        </div>
       </div>
     </div>
   </nav>
@@ -37,7 +41,7 @@ const Navigation = () => (
 
 // Footer Component
 const Footer = () => (
-  <footer className="bg-gray-900 py-12">
+  <footer data-theme-fixed className="bg-gray-900 py-12">
     <div className="max-w-7xl mx-auto px-6">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-3">

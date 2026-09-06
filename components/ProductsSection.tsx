@@ -57,7 +57,9 @@ const ProductsSection = () => {
               key={index}
               className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col"
             >
-              <Link href={`/product/${product.slug}`} className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 p-8">
+              {/* data-theme-fixed: the product shots are photographed on white,
+                  so the plate behind them stays light in both themes. */}
+              <Link data-theme-fixed href={`/product/${product.slug}`} className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 p-8">
                 <span className="absolute top-4 left-4 bg-[#EAA832] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
                   {product.badge}
                 </span>
@@ -94,11 +96,13 @@ const ProductsSection = () => {
                     >
                       Details
                     </Link>
-                    <a 
+                    {/* bg-gray-900 turns light in dark mode along with the rest of
+                        the text ramp, so this dark pill needs its own shade. */}
+                    <a
                       href={product.buyLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-gray-900 hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+                      className="bg-gray-900 dark:bg-[#2b313d] hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
                     >
                       Buy Now
                     </a>

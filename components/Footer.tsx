@@ -105,7 +105,7 @@ const NewsletterForm = () => {
 };
 
 const Footer = () => (
-  <footer className="bg-gray-900 py-16">
+  <footer data-theme-fixed className="bg-gray-900 py-16">
     <div className="max-w-7xl mx-auto px-6">
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
         <div className="space-y-6">
