@@ -1,18 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import Script from "next/script";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+// Variable font, so the whole 200-1000 weight range comes in one file and
+// every font-medium/semibold/bold/extrabold on the site is covered.
+const nunitoSans = Nunito_Sans({
+  variable: "--font-nunito-sans",
   subsets: ["latin"],
-});
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -114,7 +111,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body
-        className={`${inter.variable} ${poppins.variable} antialiased font-sans`}
+        className={`${nunitoSans.variable} antialiased font-sans`}
       >
         {children}
         

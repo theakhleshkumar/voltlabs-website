@@ -128,14 +128,24 @@
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-primary-light: var(--primary-light);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --font-nunito-sans is defined by next/font in the layout. It previously
+     pointed at --font-geist-sans, a leftover from the starter template that
+     was never defined, so `font-sans` resolved to nothing and the site fell
+     back to the system font. --font-mono is left to Tailwind's default for
+     the same reason. */
+  --font-sans: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  /* Reference the next/font variable directly rather than --font-sans:
+     --font-sans is declared in `@theme inline`, which inlines the value into
+     utilities instead of emitting a custom property, so var(--font-sans) is
+     empty here and would make this whole declaration invalid. */
+  font-family: var(--font-nunito-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 html {
