@@ -1,108 +1,8 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { WEB3FORMS_ACCESS_KEY, resetCaptcha } from "@/lib/web3forms";
 
-const NewsletterForm = () => {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error' | 'captcha'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const botcheck = (e.currentTarget.elements.namedItem("botcheck") as HTMLInputElement | null)?.checked ?? false;
-    // When the hCaptcha widget has rendered, require it to be solved. If the
-    // widget failed to load (e.g. blocked), submit without it and let the
-    // server decide.
-    const captchaField = e.currentTarget.querySelector('textarea[name="h-captcha-response"]') as HTMLTextAreaElement | null;
-    if (captchaField && !captchaField.value) {
-      setStatus('captcha');
-      return;
-    }
-    setStatus('sending');
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
-          email,
-          botcheck,
-          "h-captcha-response": captchaField?.value,
-          subject: "Newsletter Signup - 5% Off First Order",
-          from_name: "VoltLabs Website Newsletter",
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setStatus('success');
-        setEmail("");
-      } else {
-        setStatus('error');
-      }
-    } catch {
-      setStatus('error');
-    } finally {
-      resetCaptcha();
-    }
-  };
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Honeypot field for spam bots - hidden from real users */}
-        <input
-          type="checkbox"
-          name="botcheck"
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-          className="hidden"
-        />
-        <div className="flex gap-2">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="Enter your email"
-            className="flex-1 min-w-0 px-4 py-3 bg-gray-800 rounded-lg border border-gray-700 text-white placeholder-gray-500 focus:border-[#EAA832] outline-none transition-all"
-          />
-          <button
-            type="submit"
-            disabled={status === 'sending'}
-            className="bg-[#EAA832] hover:bg-[#D4922A] disabled:bg-[#EAA832]/50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg transition-all"
-          >
-            {status === 'sending' ? 'Sending...' : 'Get Discount'}
-          </button>
-        </div>
-        {/* hCaptcha widget, rendered by the Web3Forms client script */}
-        <div className="h-captcha" data-captcha="true" data-size="compact" data-theme="dark" />
-      </form>
-      {status === 'success' && (
-        <p className="text-green-400 text-sm mt-3">
-          Thanks for subscribing! We&apos;ll email your discount code soon.
-        </p>
-      )}
-      {status === 'error' && (
-        <p className="text-red-400 text-sm mt-3">
-          Something went wrong. Please try again or contact us on WhatsApp.
-        </p>
-      )}
-      {status === 'captcha' && (
-        <p className="text-yellow-400 text-sm mt-3">
-          Please complete the captcha above to subscribe.
-        </p>
-      )}
-    </div>
-  );
-};
+const WHATSAPP_URL =
+  "https://wa.me/918178902630?text=Hi%20VoltLabs!%20I%20have%20a%20question%20about%20your%20products.";
 
 const Footer = () => (
   <footer data-theme-fixed className="bg-gray-900 py-16">
@@ -115,8 +15,8 @@ const Footer = () => (
           <p className="text-gray-400 leading-relaxed">
             Making smart homes accessible to everyone. Premium quality smart lighting at honest prices.
           </p>
-          <a 
-            href="https://wa.me/918178902630?text=Hi%20VoltLabs!%20I%20have%20a%20question%20about%20your%20products."
+          <a
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -127,7 +27,7 @@ const Footer = () => (
             <span className="text-sm text-gray-400">Chat with us on WhatsApp</span>
           </a>
         </div>
-        
+
         <div>
           <h4 className="text-white font-semibold mb-6">Products</h4>
           <ul className="space-y-4">
@@ -138,7 +38,7 @@ const Footer = () => (
             ))}
           </ul>
         </div>
-        
+
         <div>
           <h4 className="text-white font-semibold mb-6">Support</h4>
           <ul className="space-y-4">
@@ -159,14 +59,50 @@ const Footer = () => (
             </li>
           </ul>
         </div>
-        
+
         <div>
-          <h4 className="text-white font-semibold mb-6">Get 5% Off On Your First Order</h4>
-          <p className="text-gray-400 mb-4">Join to get exclusive deals and early access to smart device launches.</p>
-          <NewsletterForm />
+          <h4 className="text-white font-semibold mb-6">Get in Touch</h4>
+          <ul className="space-y-5">
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 mt-0.5 shrink-0 text-[#EAA832]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <div>
+                <div className="text-sm text-gray-500">Email us at</div>
+                <a href="mailto:support@voltlabs.in" className="text-gray-400 hover:text-[#EAA832] transition-colors break-all">
+                  support@voltlabs.in
+                </a>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 mt-0.5 shrink-0 text-[#EAA832]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <div>
+                <div className="text-sm text-gray-500">Call or WhatsApp</div>
+                <a href="tel:+918178902630" className="text-gray-400 hover:text-[#EAA832] transition-colors">
+                  +91 8178902630
+                </a>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <svg className="w-5 h-5 mt-0.5 shrink-0 text-[#EAA832]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <div>
+                <div className="text-sm text-gray-500">Office Address</div>
+                <address className="text-gray-400 text-sm not-italic leading-relaxed">
+                  Barrod, Barrod Sub Post Office, Kankara Barrod, Barrod,
+                  <br />
+                  Kotputli-Behror - 301020 India (IN)
+                </address>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-      
+
       <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-gray-500 text-sm">
           © 2026 VoltLabs. All rights reserved.
