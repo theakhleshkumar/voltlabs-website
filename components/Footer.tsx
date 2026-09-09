@@ -49,6 +49,9 @@ const Footer = () => (
               <a href="#contact" className="text-gray-400 hover:text-[#EAA832] transition-colors">Contact Us</a>
             </li>
             <li>
+              <Link href="/shipping-policy" className="text-gray-400 hover:text-[#EAA832] transition-colors">Shipping Policy</Link>
+            </li>
+            <li>
               <Link href="/refund-policy" className="text-gray-400 hover:text-[#EAA832] transition-colors">Refund Policy</Link>
             </li>
             <li>

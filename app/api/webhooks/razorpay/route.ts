@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { orders, webhookEvents } from "@/lib/db/schema";
+import { logger } from "@/lib/logger";
 import { verifyWebhookSignature } from "@/lib/razorpay";
 
 /**
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
   const rawBody = await request.text();
 
   if (!verifyWebhookSignature({ rawBody, signature })) {
-    console.warn("[webhook] Rejected call with bad signature, event", eventId);
+    logger.warn("webhook.bad_signature", { eventId });
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
   }
 
@@ -102,7 +103,7 @@ export async function POST(request: Request) {
   } catch (error) {
     // Return non-2xx so Razorpay retries. The event row is removed first, or
     // the retry would be deduplicated and the order left stuck as pending.
-    console.error("[webhook] Failed to apply event", eventId, error);
+    logger.error("webhook.apply_failed", { eventId, event, error });
     await db.delete(webhookEvents).where(eq(webhookEvents.id, eventId));
     return NextResponse.json({ error: "Processing failed." }, { status: 500 });
   }

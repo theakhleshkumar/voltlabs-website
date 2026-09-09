@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { orders } from "@/lib/db/schema";
+import { logger } from "@/lib/logger";
 import { verifyCheckoutSignature } from "@/lib/razorpay";
 
 /**
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
   } = parsed.data;
 
   if (!verifyCheckoutSignature({ razorpayOrderId, razorpayPaymentId, signature })) {
-    console.warn("[verify] Signature mismatch for order", razorpayOrderId);
+    logger.warn("payment.signature_mismatch", { razorpayOrderId });
     return NextResponse.json({ error: "Payment could not be verified." }, { status: 400 });
   }
 

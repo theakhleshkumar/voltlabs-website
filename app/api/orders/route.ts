@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { orderItems, orders } from "@/lib/db/schema";
-import { sendOrderNotification } from "@/lib/email";
+import { sendCustomerConfirmation, sendOrderNotification } from "@/lib/email";
+import { env } from "@/lib/env";
+import { logger } from "@/lib/logger";
 import { PricingError, priceOrder } from "@/lib/pricing";
+import { checkOrderRateLimit, clientIpFrom, hashIp } from "@/lib/rate-limit";
 import { createRazorpayOrder, getPublicKeyId } from "@/lib/razorpay";
 
 /**
@@ -82,11 +85,35 @@ export async function POST(request: Request) {
 
   const { items, customer, address, notes, paymentMethod } = parsed.data;
 
+  // Online payment is only offered when Razorpay is actually configured, so a
+  // half-configured deployment cannot strand a customer at a broken payment step.
+  if (paymentMethod === "online" && !env.razorpay.isConfigured()) {
+    logger.warn("orders.online_unavailable", {});
+    return NextResponse.json(
+      { error: "Online payment is unavailable right now. Please choose cash on delivery." },
+      { status: 503 },
+    );
+  }
+
+  const ipHash = hashIp(clientIpFrom(request));
+
+  try {
+    const limit = await checkOrderRateLimit({ phone: customer.phone, ipHash });
+    if (!limit.allowed) {
+      logger.warn("orders.rate_limited", { ipHash, phone: customer.phone });
+      return NextResponse.json({ error: limit.reason }, { status: 429 });
+    }
+  } catch (error) {
+    // A rate-limit lookup failure must not stop a genuine customer ordering.
+    logger.error("orders.rate_limit_check_failed", { error });
+  }
+
   let priced;
   try {
     priced = priceOrder(items);
   } catch (error) {
     if (error instanceof PricingError) {
+      logger.info("orders.rejected", { reason: error.message });
       return NextResponse.json({ error: error.message }, { status: 409 });
     }
     throw error;
@@ -105,7 +132,7 @@ export async function POST(request: Request) {
       });
       razorpayOrderId = razorpayOrder.id;
     } catch (error) {
-      console.error("[orders] Razorpay order creation failed", error);
+      logger.error("orders.razorpay_create_failed", { error });
       return NextResponse.json(
         { error: "We could not start the payment. Please try again in a moment." },
         { status: 502 },
@@ -134,6 +161,7 @@ export async function POST(request: Request) {
           state: address.state,
           pincode: address.pincode,
           notes: notes || null,
+          ipHash,
         })
         .returning();
 
@@ -144,12 +172,21 @@ export async function POST(request: Request) {
       return created;
     });
   } catch (error) {
-    console.error("[orders] Failed to persist order", error);
+    logger.error("orders.persist_failed", { error });
     return NextResponse.json(
       { error: "We could not save your order. Please try again." },
       { status: 500 },
     );
   }
+
+  logger.info("orders.placed", {
+    orderNo: order.orderNo,
+    orderId: order.id,
+    paymentMethod,
+    totalPaise: priced.totalPaise,
+    itemCount: priced.items.length,
+    pincode: address.pincode,
+  });
 
   if (paymentMethod === "online") {
     return NextResponse.json({
@@ -162,13 +199,15 @@ export async function POST(request: Request) {
     });
   }
 
-  // COD is complete at this point. The order is saved, so a failed email is
-  // logged and surfaced but never turns a real order into an error page.
-  const email = await sendOrderNotification({
+  // COD is complete at this point. Both emails are best-effort: the order is
+  // already saved, so a mail outage must never turn a real order into an error
+  // page. They are sent together rather than in sequence so a slow provider
+  // does not double the customer's wait.
+  const payload = {
     orderNo: order.orderNo,
     orderId: order.id,
     placedAt: order.createdAt,
-    paymentMethod: "cod",
+    paymentMethod: "cod" as const,
     customer,
     address,
     items: priced.items,
@@ -176,12 +215,26 @@ export async function POST(request: Request) {
     shippingPaise: priced.shippingPaise,
     totalPaise: priced.totalPaise,
     notes: notes || null,
-  });
+  };
 
-  if (!email.sent) {
-    console.error(
-      `[orders] Order ${order.orderNo} saved but notification failed via ${email.provider}: ${email.error}`,
-    );
+  const [shop, buyer] = await Promise.all([
+    sendOrderNotification(payload),
+    sendCustomerConfirmation(payload),
+  ]);
+
+  if (!shop.sent) {
+    logger.error("orders.shop_notification_failed", {
+      orderNo: order.orderNo,
+      provider: shop.provider,
+      reason: shop.error,
+    });
+  }
+  if (!buyer.sent) {
+    logger.warn("orders.customer_confirmation_failed", {
+      orderNo: order.orderNo,
+      provider: buyer.provider,
+      reason: buyer.error,
+    });
   }
 
   return NextResponse.json({

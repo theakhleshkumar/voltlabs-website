@@ -65,6 +65,13 @@ export const orders = pgTable(
 
     notes: text("notes"),
 
+    /**
+     * Salted hash of the caller's IP, never the address itself. Enough to rate
+     * limit and to spot a burst of fraudulent orders, without keeping personal
+     * data the privacy policy would have to account for.
+     */
+    ipHash: text("ip_hash"),
+
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
     paidAt: timestamp("paid_at", { withTimezone: true }),
@@ -73,6 +80,10 @@ export const orders = pgTable(
     index("orders_status_idx").on(table.status),
     index("orders_created_at_idx").on(table.createdAt),
     index("orders_customer_email_idx").on(table.customerEmail),
+    // Rate limiting counts recent orders by phone and by IP, so both are
+    // indexed alongside the timestamp they are filtered on.
+    index("orders_phone_created_idx").on(table.customerPhone, table.createdAt),
+    index("orders_ip_created_idx").on(table.ipHash, table.createdAt),
   ],
 );
 

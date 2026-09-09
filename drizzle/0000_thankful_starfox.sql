@@ -32,6 +32,7 @@ CREATE TABLE "orders" (
 	"pincode" text NOT NULL,
 	"country" text DEFAULT 'India' NOT NULL,
 	"notes" text,
+	"ip_hash" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"paid_at" timestamp with time zone,
@@ -49,4 +50,6 @@ ALTER TABLE "order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOR
 CREATE INDEX "order_items_order_id_idx" ON "order_items" USING btree ("order_id");--> statement-breakpoint
 CREATE INDEX "orders_status_idx" ON "orders" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "orders_created_at_idx" ON "orders" USING btree ("created_at");--> statement-breakpoint
-CREATE INDEX "orders_customer_email_idx" ON "orders" USING btree ("customer_email");
+CREATE INDEX "orders_customer_email_idx" ON "orders" USING btree ("customer_email");--> statement-breakpoint
+CREATE INDEX "orders_phone_created_idx" ON "orders" USING btree ("customer_phone","created_at");--> statement-breakpoint
+CREATE INDEX "orders_ip_created_idx" ON "orders" USING btree ("ip_hash","created_at");

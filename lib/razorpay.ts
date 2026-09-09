@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { env } from "./env";
 
 /**
  * Server-only Razorpay helpers. Deliberately plain fetch plus node:crypto
@@ -11,19 +12,12 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 const API = "https://api.razorpay.com/v1";
 
-const requireEnv = (name: string): string => {
-  const value = process.env[name];
-  if (!value) throw new Error(`${name} is not set. See .env.example.`);
-  return value;
-};
-
 /** Safe to expose to the browser -- the checkout script needs it. */
-export const getPublicKeyId = (): string => requireEnv("RAZORPAY_KEY_ID");
+export const getPublicKeyId = (): string => env.razorpay.keyId();
 
 const authHeader = (): string => {
-  const id = requireEnv("RAZORPAY_KEY_ID");
-  const secret = requireEnv("RAZORPAY_KEY_SECRET");
-  return `Basic ${Buffer.from(`${id}:${secret}`).toString("base64")}`;
+  const pair = `${env.razorpay.keyId()}:${env.razorpay.keySecret()}`;
+  return `Basic ${Buffer.from(pair).toString("base64")}`;
 };
 
 export interface RazorpayOrder {
@@ -82,7 +76,7 @@ export const verifyCheckoutSignature = (params: {
   razorpayPaymentId: string;
   signature: string;
 }): boolean => {
-  const expected = createHmac("sha256", requireEnv("RAZORPAY_KEY_SECRET"))
+  const expected = createHmac("sha256", env.razorpay.keySecret())
     .update(`${params.razorpayOrderId}|${params.razorpayPaymentId}`)
     .digest("hex");
 
@@ -98,7 +92,7 @@ export const verifyWebhookSignature = (params: {
   rawBody: string;
   signature: string;
 }): boolean => {
-  const expected = createHmac("sha256", requireEnv("RAZORPAY_WEBHOOK_SECRET"))
+  const expected = createHmac("sha256", env.razorpay.webhookSecret())
     .update(params.rawBody)
     .digest("hex");
 
