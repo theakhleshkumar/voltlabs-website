@@ -38,14 +38,27 @@ export const env = {
 
   isProduction: () => process.env.NODE_ENV === "production",
 
+  smtp: {
+    /**
+     * Any SMTP server: the domain mailbox today, AWS SES tomorrow. SES gives
+     * you an SMTP host and credentials, so the switch touches only these values.
+     */
+    config: () => ({
+      host: require_("SMTP_HOST", "Your mail provider's outgoing server."),
+      port: Number(read("SMTP_PORT") ?? 587),
+      user: require_("SMTP_USER", "Usually the full mailbox address."),
+      password: require_("SMTP_PASSWORD", "The mailbox password or app password."),
+      // 465 is implicit TLS; 587 upgrades with STARTTLS.
+      secure: read("SMTP_SECURE") === "true" || Number(read("SMTP_PORT") ?? 587) === 465,
+    }),
+    from: () => read("MAIL_FROM") ?? `VoltLabs <${read("SMTP_USER") ?? "orders@voltlabs.in"}>`,
+    isConfigured: () =>
+      Boolean(read("SMTP_HOST") && read("SMTP_USER") && read("SMTP_PASSWORD")),
+  },
+
   email: {
-    /** Where new order notifications go. */
+    /** Where new order notifications and contact messages go. */
     notificationAddress: () => read("ORDER_NOTIFICATION_EMAIL") ?? "admin@voltlabs.in",
-    from: () => read("ORDER_EMAIL_FROM") ?? "VoltLabs Orders <orders@voltlabs.in>",
-    resendApiKey: () => read("RESEND_API_KEY"),
-    web3formsKey: () => read("WEB3FORMS_ORDERS_KEY"),
-    /** True when some provider is configured; false means orders log instead. */
-    isConfigured: () => Boolean(read("RESEND_API_KEY") ?? read("WEB3FORMS_ORDERS_KEY")),
   },
 
   admin: {
@@ -89,10 +102,10 @@ export const checkConfiguration = (): ConfigCheck[] => [
     detail: "DATABASE_URL — orders cannot be saved without it",
   },
   {
-    name: "orderEmail",
-    ok: env.email.isConfigured(),
+    name: "email",
+    ok: env.smtp.isConfigured(),
     required: false,
-    detail: "RESEND_API_KEY or WEB3FORMS_ORDERS_KEY — orders are logged instead of emailed",
+    detail: "SMTP_HOST, SMTP_USER and SMTP_PASSWORD — mail is logged instead of sent",
   },
   {
     name: "adminPanel",

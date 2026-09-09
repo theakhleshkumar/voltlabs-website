@@ -1,4 +1,5 @@
 import {
+  boolean,
   index,
   integer,
   jsonb,
@@ -116,6 +117,32 @@ export const orderItems = pgTable(
  * several times. Recording each event id and ignoring duplicates keeps
  * processing idempotent.
  */
+/**
+ * Contact form submissions are stored before they are emailed, so a message is
+ * never lost to a mail outage. Previously the form posted straight to a
+ * third-party service and nothing was kept.
+ */
+export const contactMessages = pgTable(
+  "contact_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    subject: text("subject").notNull(),
+    message: text("message").notNull(),
+    /** Salted hash of the sender's IP, for rate limiting. Never the address. */
+    ipHash: text("ip_hash"),
+    emailed: boolean("emailed").notNull().default(false),
+    handled: boolean("handled").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("contact_created_at_idx").on(table.createdAt),
+    index("contact_ip_created_idx").on(table.ipHash, table.createdAt),
+  ],
+);
+
 export const webhookEvents = pgTable("webhook_events", {
   id: text("id").primaryKey(), // Razorpay's x-razorpay-event-id
   event: text("event").notNull(),

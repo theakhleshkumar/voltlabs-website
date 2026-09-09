@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { checkConfiguration } from "@/lib/env";
+import { checkConfiguration, env } from "@/lib/env";
+import { verifySmtp } from "@/lib/mailer";
 
 /**
  * Health check.
@@ -31,16 +32,23 @@ export async function GET() {
     };
   }
 
-  // Only the database is fatal. Missing email means orders are logged rather
+  // Actually talk to the mail server rather than just checking that variables
+  // exist: wrong credentials or a blocked port look identical to configured.
+  const smtp = env.smtp.isConfigured()
+    ? await verifySmtp()
+    : { ok: false, error: "SMTP is not configured" };
+
+  // Only the database is fatal. Unreachable mail means orders are logged rather
   // than mailed, which is degraded but still takes money.
   const healthy = database.ok;
-  const degraded = config.some((check) => !check.required && !check.ok);
+  const degraded = !smtp.ok || config.some((check) => !check.required && !check.ok);
 
   return NextResponse.json(
     {
       status: healthy ? (degraded ? "degraded" : "ok") : "unhealthy",
       time: new Date().toISOString(),
       database,
+      smtp,
       configuration: config.map(({ name, ok, required, detail }) => ({
         name,
         ok,

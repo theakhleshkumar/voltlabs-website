@@ -225,14 +225,12 @@ export async function POST(request: Request) {
   if (!shop.sent) {
     logger.error("orders.shop_notification_failed", {
       orderNo: order.orderNo,
-      provider: shop.provider,
       reason: shop.error,
     });
   }
   if (!buyer.sent) {
     logger.warn("orders.customer_confirmation_failed", {
       orderNo: order.orderNo,
-      provider: buyer.provider,
       reason: buyer.error,
     });
   }

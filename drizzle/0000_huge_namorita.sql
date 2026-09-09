@@ -1,5 +1,18 @@
 CREATE TYPE "public"."order_status" AS ENUM('pending', 'confirmed', 'paid', 'failed', 'cancelled', 'shipped', 'delivered', 'refunded');--> statement-breakpoint
 CREATE TYPE "public"."payment_method" AS ENUM('cod', 'online');--> statement-breakpoint
+CREATE TABLE "contact_messages" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL,
+	"phone" text,
+	"subject" text NOT NULL,
+	"message" text NOT NULL,
+	"ip_hash" text,
+	"emailed" boolean DEFAULT false NOT NULL,
+	"handled" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "order_items" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"order_id" uuid NOT NULL,
@@ -47,6 +60,8 @@ CREATE TABLE "webhook_events" (
 );
 --> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "contact_created_at_idx" ON "contact_messages" USING btree ("created_at");--> statement-breakpoint
+CREATE INDEX "contact_ip_created_idx" ON "contact_messages" USING btree ("ip_hash","created_at");--> statement-breakpoint
 CREATE INDEX "order_items_order_id_idx" ON "order_items" USING btree ("order_id");--> statement-breakpoint
 CREATE INDEX "orders_status_idx" ON "orders" USING btree ("status");--> statement-breakpoint
 CREATE INDEX "orders_created_at_idx" ON "orders" USING btree ("created_at");--> statement-breakpoint

@@ -1,20 +1,14 @@
 import { env } from "./env";
-import { logger } from "./logger";
+import { sendMail } from "./mailer";
 import { formatInr } from "./pricing";
 
 /**
- * Transactional email.
+ * Transactional email content.
  *
- * Three rules shape this module:
- *
- * 1. Sending never throws. An order that is already saved must not be reported
- *    as failed because a mail API had a bad minute. Every path returns a result
- *    and logs; callers carry on.
- * 2. Providers sit behind `deliver`, so swapping to SES during the AWS move
- *    changes one function and no call sites.
- * 3. Provider capability is explicit. Web3Forms can only deliver to the address
- *    its key is registered to, so it can notify the shop but cannot email a
- *    customer. That limitation is reported rather than silently swallowed.
+ * Delivery itself lives in lib/mailer over SMTP; this module only decides what
+ * each message says. Sending never throws -- callers are usually finishing an
+ * order that is already saved, and a mail outage must not turn a real order
+ * into an error page.
  */
 
 export interface OrderEmailPayload {
@@ -60,90 +54,6 @@ const itemLines = (p: OrderEmailPayload): string[] =>
     (item) =>
       `  ${item.quantity} x ${item.productName} @ ${formatInr(item.unitPricePaise)} = ${formatInr(item.lineTotalPaise)}`,
   );
-
-// ---------------------------------------------------------------------------
-// Delivery
-// ---------------------------------------------------------------------------
-
-type SendResult = { sent: boolean; provider: string; error?: string };
-
-interface Message {
-  to: string;
-  subject: string;
-  text: string;
-  html: string;
-  /**
-   * Web3Forms always delivers to the address its access key is registered to.
-   * Only messages addressed to the shop may fall back to it.
-   */
-  allowShopOnlyProvider: boolean;
-}
-
-const sendViaResend = async (message: Message): Promise<SendResult> => {
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.email.resendApiKey()}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: env.email.from(),
-      to: [message.to],
-      subject: message.subject,
-      text: message.text,
-      html: message.html,
-    }),
-  });
-
-  if (!response.ok) {
-    return { sent: false, provider: "resend", error: await response.text() };
-  }
-  return { sent: true, provider: "resend" };
-};
-
-const sendViaWeb3Forms = async (message: Message): Promise<SendResult> => {
-  const response = await fetch("https://api.web3forms.com/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      access_key: env.email.web3formsKey(),
-      subject: message.subject,
-      from_name: "VoltLabs Orders",
-      message: message.text,
-    }),
-  });
-
-  const result = (await response.json().catch(() => ({}))) as { success?: boolean };
-  if (!response.ok || !result.success) {
-    return { sent: false, provider: "web3forms", error: JSON.stringify(result) };
-  }
-  return { sent: true, provider: "web3forms" };
-};
-
-const deliver = async (message: Message): Promise<SendResult> => {
-  try {
-    if (env.email.resendApiKey()) return await sendViaResend(message);
-
-    if (env.email.web3formsKey() && message.allowShopOnlyProvider) {
-      return await sendViaWeb3Forms(message);
-    }
-
-    const reason = env.email.web3formsKey()
-      ? "Web3Forms can only deliver to its registered address; set RESEND_API_KEY to email customers"
-      : "No provider configured";
-
-    // Log the whole message so it stays recoverable from the logs.
-    logger.warn("email.not_sent", { to: message.to, subject: message.subject, reason, body: message.text });
-    return { sent: false, provider: "none", error: reason };
-  } catch (error) {
-    logger.error("email.failed", { to: message.to, subject: message.subject, error });
-    return {
-      sent: false,
-      provider: "unknown",
-      error: error instanceof Error ? error.message : String(error),
-    };
-  }
-};
 
 // ---------------------------------------------------------------------------
 // Shop notification
@@ -213,15 +123,16 @@ const shopHtml = (p: OrderEmailPayload): string => `
 </div>`;
 
 /** Tells the shop a new order has arrived. */
-export const sendOrderNotification = async (p: OrderEmailPayload): Promise<SendResult> =>
-  deliver({
+export const sendOrderNotification = async (p: OrderEmailPayload) =>
+  sendMail({
     to: env.email.notificationAddress(),
     subject: `New ${p.paymentMethod === "cod" ? "COD" : "prepaid"} order ${formatOrderNo(
       p.orderNo,
     )} — ${formatInr(p.totalPaise)}`,
     text: shopText(p),
     html: shopHtml(p),
-    allowShopOnlyProvider: true,
+    // Replying to the notification reaches the customer directly.
+    replyTo: p.customer.email,
   });
 
 // ---------------------------------------------------------------------------
@@ -297,18 +208,12 @@ const customerHtml = (p: OrderEmailPayload): string => `
   </p>
 </div>`;
 
-/**
- * Confirms the order to the customer. Requires a provider that can address
- * arbitrary recipients, so it is skipped with a warning when only Web3Forms is
- * configured.
- */
-export const sendCustomerConfirmation = async (
-  p: OrderEmailPayload,
-): Promise<SendResult> =>
-  deliver({
+/** Confirms the order to the customer. */
+export const sendCustomerConfirmation = async (p: OrderEmailPayload) =>
+  sendMail({
     to: p.customer.email,
     subject: `Your VoltLabs order ${formatOrderNo(p.orderNo)} is confirmed`,
     text: customerText(p),
     html: customerHtml(p),
-    allowShopOnlyProvider: false,
+    replyTo: env.email.notificationAddress(),
   });
