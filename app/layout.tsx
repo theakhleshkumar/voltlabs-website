@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "VoltLabs | Smart Touch Lamps & RGB Lights - Shop Online India",
-    description: "Premium WiFi-connected smart touch lamps starting ₹799. App control, 16M+ colors, 1-year warranty. Free shipping across India. Shop now on Amazon!",
+    description: "Premium WiFi-connected smart touch lamps starting ₹799. App control, 16M+ colors, 1-year warranty. Free shipping and cash on delivery across India. Order now!",
     url: "https://voltlabs.in",
     siteName: "VoltLabs",
     locale: "en_IN",

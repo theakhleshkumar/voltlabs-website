@@ -19,7 +19,6 @@ export interface Product {
     value: string;
   }[];
   aboutPoints?: string[];
-  buyLink: string;
   inStock: boolean;
   rating: number;
   reviewCount: number;
@@ -51,7 +50,6 @@ export const products: Product[] = [
       { label: "Suitable For", value: "Bedroom, Study, Kids Room" },
       { label: "Warranty", value: "1 Year" }
     ],
-    buyLink: "https://amzn.in/d/080TItzR",
     inStock: true,
     rating: 4.5,
     reviewCount: 127
@@ -99,7 +97,6 @@ export const products: Product[] = [
       "Versatile Smart Lighting – Use as a smart LED table lamp, bedside reading light, study lamp, or ambient night light. Ideal for bedrooms, offices, kids' rooms, and home décor.",
       "Energy-Efficient & Long-Lasting – Built with premium LED technology for soft, flicker-free light and low power consumption. Provides consistent brightness and long life for daily use."
     ],
-    buyLink: "https://www.amazon.in/dp/B0FXVM966H",
     inStock: true,
     rating: 5.0,
     reviewCount: 1
@@ -147,7 +144,6 @@ export const products: Product[] = [
       "Energy Efficient & Long Lasting – LED technology consumes less power while offering a longer lifespan. Perfect for everyday use with minimal maintenance.",
       "Perfect Gift Choice – Ideal for birthdays, housewarming, festive gifts and modern home setups. A premium décor accessory for friends, family and office spaces."
     ],
-    buyLink: "https://www.amazon.in/dp/B0G3KYT8ZR",
     inStock: true,
     rating: 4.4,
     reviewCount: 2

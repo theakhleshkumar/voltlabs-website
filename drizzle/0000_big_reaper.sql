@@ -1,4 +1,5 @@
-CREATE TYPE "public"."order_status" AS ENUM('pending', 'paid', 'failed', 'cancelled', 'shipped', 'delivered', 'refunded');--> statement-breakpoint
+CREATE TYPE "public"."order_status" AS ENUM('pending', 'confirmed', 'paid', 'failed', 'cancelled', 'shipped', 'delivered', 'refunded');--> statement-breakpoint
+CREATE TYPE "public"."payment_method" AS ENUM('cod', 'online');--> statement-breakpoint
 CREATE TABLE "order_items" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"order_id" uuid NOT NULL,
@@ -13,7 +14,8 @@ CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"order_no" serial NOT NULL,
 	"status" "order_status" DEFAULT 'pending' NOT NULL,
-	"razorpay_order_id" text NOT NULL,
+	"payment_method" "payment_method" DEFAULT 'cod' NOT NULL,
+	"razorpay_order_id" text,
 	"razorpay_payment_id" text,
 	"razorpay_signature" text,
 	"currency" text DEFAULT 'INR' NOT NULL,

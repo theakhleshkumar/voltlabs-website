@@ -38,10 +38,8 @@ const Header = () => {
             <ThemeToggle />
 
             {/* Shop Now Button - Hidden on mobile, shown on tablet+ */}
-            <a 
-              href="https://www.amazon.in/stores/VoltLabs/page/417214B6-FD85-46C7-89D4-401DFC5C7732?lp_asin=B0FXVM966H&ref_=cm_sw_r_ud_ast_store_1G952ME5NPWS3TQPS3YH"
-              target="_blank"
-              rel="noopener noreferrer"
+            <a
+              href="#products"
               className="hidden sm:inline-block bg-[#EAA832] hover:bg-[#D4922A] text-white px-6 py-2.5 rounded-full font-semibold transition-all hover:shadow-lg hover:shadow-[#EAA832]/30"
             >
               Shop Now
@@ -82,14 +80,12 @@ const Header = () => {
               </a>
             ))}
             <div className="pt-4 border-t border-gray-100">
-              <a 
-                href="https://www.amazon.in/stores/VoltLabs/page/417214B6-FD85-46C7-89D4-401DFC5C7732?lp_asin=B0FXVM966H&ref_=cm_sw_r_ud_ast_store_1G952ME5NPWS3TQPS3YH"
-                target="_blank"
-                rel="noopener noreferrer"
+              <a
+                href="#products"
                 onClick={() => setIsMenuOpen(false)}
                 className="block w-full text-center bg-[#EAA832] hover:bg-[#D4922A] text-white px-6 py-3 rounded-full font-semibold transition-all"
               >
-                Shop Now on Amazon
+                Shop Now
               </a>
             </div>
           </div>

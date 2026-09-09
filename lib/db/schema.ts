@@ -17,14 +17,17 @@ import {
  */
 
 export const orderStatus = pgEnum("order_status", [
-  "pending", // created, payment not completed
-  "paid",
+  "pending", // placed; COD awaiting confirmation, online awaiting payment
+  "confirmed", // COD confirmed by phone, ready to dispatch
+  "paid", // money received (online at checkout, COD on delivery)
   "failed",
   "cancelled",
   "shipped",
   "delivered",
   "refunded",
 ]);
+
+export const paymentMethod = pgEnum("payment_method", ["cod", "online"]);
 
 export const orders = pgTable(
   "orders",
@@ -33,10 +36,12 @@ export const orders = pgTable(
     // Human-readable reference for support and couriers: VL-00001.
     orderNo: serial("order_no").notNull(),
     status: orderStatus("status").notNull().default("pending"),
+    paymentMethod: paymentMethod("payment_method").notNull().default("cod"),
 
-    // Razorpay linkage. The order id is unique so a replayed webhook cannot
-    // create a second row for the same payment.
-    razorpayOrderId: text("razorpay_order_id").notNull().unique(),
+    // Razorpay linkage, null for cash on delivery. Unique so a replayed
+    // webhook cannot create a second row for the same payment; Postgres allows
+    // many nulls in a unique column, so COD orders do not collide.
+    razorpayOrderId: text("razorpay_order_id").unique(),
     razorpayPaymentId: text("razorpay_payment_id"),
     razorpaySignature: text("razorpay_signature"),
 

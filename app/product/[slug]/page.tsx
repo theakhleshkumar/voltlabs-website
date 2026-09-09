@@ -243,7 +243,7 @@ export default async function ProductPage({
         },
         "author": {
           "@type": "Person",
-          "name": "Amazon Customer"
+          "name": "Verified Buyer"
         },
         "reviewBody": `Great ${product.name}! Works exactly as described. Good quality and value for money.`,
         "datePublished": "2026-03-01"
@@ -279,14 +279,12 @@ export default async function ProductPage({
             </nav>
             <div className="flex items-center gap-3">
               <ThemeToggle />
-              <a
-                href={product.buyLink}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/checkout/${product.slug}`}
                 className="bg-[#EAA832] hover:bg-[#D4922A] text-white px-6 py-2 rounded-full font-semibold text-sm transition-colors"
               >
                 Buy Now
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -387,17 +385,15 @@ export default async function ProductPage({
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <a
-                  href={product.buyLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-3 bg-[#FF9900] hover:bg-[#e68a00] text-white px-8 py-4 rounded-full font-semibold text-lg transition-all hover:shadow-lg"
+                <Link
+                  href={`/checkout/${product.slug}`}
+                  className="flex-1 flex items-center justify-center gap-3 bg-[#EAA832] hover:bg-[#D4922A] text-white px-8 py-4 rounded-full font-semibold text-lg transition-all hover:shadow-lg hover:shadow-[#EAA832]/30"
                 >
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.065.138.06.175.175.108.347-.057.13-.125.25-.204.359-1.614 2.19-4.313 3.286-8.094 3.286-4.226 0-8.03-1.335-11.404-4.002-.138-.116-.203-.238-.195-.366l.002-.03.038-.117c.06-.135.14-.253.243-.355l.233-.166zm9.694-3.663c-.18-.16-.18-.42 0-.58l.66-.66c.16-.16.42-.16.58 0l.99.99 2.31-2.31c.16-.16.42-.16.58 0l.66.66c.16.16.16.42 0 .58l-3.3 3.3c-.16.16-.42.16-.58 0l-1.9-1.98zM6.681 15.75c-.066 0-.135-.015-.203-.044l-1.16-.634c-.138-.072-.174-.196-.1-.37.072-.176.196-.247.37-.213l1.16.634c.138.072.174.196.1.37-.046.11-.097.185-.167.257zm2.476 1.167c-.066 0-.135-.015-.203-.044l-1.884-1.03c-.138-.072-.174-.196-.1-.37.072-.138.196-.174.37-.1l1.884 1.03c.138.072.174.196.1.37-.046.072-.097.11-.167.144zm-.848-3.506l-.848.38c-.138.058-.277.022-.37-.1-.094-.123-.064-.26.07-.37l.71-.385c.138-.095.277-.058.37.066.095.122.138.26.068.41zm4.328 2.083c-.057 0-.12-.012-.182-.035l-.56-.242c-.138-.058-.196-.182-.138-.32.058-.138.182-.196.32-.138l.56.24c.138.06.196.184.138.322-.043.107-.078.156-.138.173z" />
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
-                  Buy on Amazon
-                </a>
+                  Order Now
+                </Link>
                 <a
                   href={`https://wa.me/918178902630?text=Hi%20VoltLabs!%20I%20want%20to%20know%20more%20about%20the%20${encodeURIComponent(product.name)}`}
                   target="_blank"
@@ -491,17 +487,15 @@ export default async function ProductPage({
             <p className="text-white/90 mb-8 max-w-xl mx-auto">
               Order now and enjoy free shipping across India. Transform your home with VoltLabs smart lighting.
             </p>
-            <a
-              href={product.buyLink}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={`/checkout/${product.slug}`}
               className="inline-flex items-center gap-2 bg-white text-[#EAA832] px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all"
             >
               Order Now - ₹{product.price}
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-            </a>
+            </Link>
           </div>
         </section>
       </main>

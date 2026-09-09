@@ -12,7 +12,6 @@ const ProductsSection = () => {
       image: "/product-lamp-rgb.png",
       badge: "Best Seller",
       features: ["Smart Lamp", "Night Lamp", "Table Lamp", "Touch Control", "7 Colors", "RGB", "USB Powered"],
-      buyLink: "https://amzn.in/d/080TItzR"
     },
     {
       slug: "smart-table-touch-lamp",
@@ -23,7 +22,6 @@ const ProductsSection = () => {
       image: "/product-lamp-warm.jpg",
       badge: "New",
       features: ["3-Way Dimming", "Touch Control", "LED", "Energy Efficient", "Made in India"],
-      buyLink: "https://www.amazon.in/dp/B0FXVM966H"
     },
     {
       slug: "modern-spiral-table-lamp",
@@ -34,7 +32,6 @@ const ProductsSection = () => {
       image: "/product-lamp-spiral.jpg",
       badge: "Premium",
       features: ["3 Light Modes", "E27 LED", "Touch Switch", "Flicker-Free", "Made in India"],
-      buyLink: "https://www.amazon.in/dp/B0G3KYT8ZR"
     }
   ];
 
@@ -98,14 +95,12 @@ const ProductsSection = () => {
                     </Link>
                     {/* bg-gray-900 turns light in dark mode along with the rest of
                         the text ramp, so this dark pill needs its own shade. */}
-                    <a
-                      href={product.buyLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={`/checkout/${product.slug}`}
                       className="bg-gray-900 dark:bg-[#2b313d] hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
                     >
                       Buy Now
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
