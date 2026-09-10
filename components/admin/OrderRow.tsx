@@ -18,7 +18,8 @@ export interface AdminOrder {
   id: string;
   orderNo: number;
   status: OrderStatus;
-  paymentMethod: "cod" | "online";
+  paymentMethod: "cod" | "online" | "upi";
+  upiReference: string | null;
   totalPaise: number;
   customerName: string;
   customerPhone: string;
@@ -126,6 +127,9 @@ const OrderRow = ({ order }: { order: AdminOrder }) => {
             {formatInr(order.totalPaise)}
           </div>
           <div className="text-xs text-gray-500 uppercase">{order.paymentMethod}</div>
+          {order.paymentMethod === "upi" && order.status === "pending" && (
+            <div className="text-xs font-semibold text-amber-700 mt-0.5">verify payment</div>
+          )}
         </td>
 
         <td className="px-4 py-3">
@@ -175,6 +179,17 @@ const OrderRow = ({ order }: { order: AdminOrder }) => {
               <div>
                 <div className="font-semibold text-gray-900 mb-1">Contact</div>
                 <p className="text-gray-700">{order.customerEmail}</p>
+                {order.paymentMethod === "upi" && (
+                  <>
+                    <div className="font-semibold text-gray-900 mt-3 mb-1">UPI reference</div>
+                    <p className="font-mono text-gray-900 select-all">
+                      {order.upiReference ?? "not provided"}
+                    </p>
+                    <p className="text-gray-600 mt-1">
+                      Match this against your bank before dispatching, then set the status to paid.
+                    </p>
+                  </>
+                )}
                 {order.notes && (
                   <>
                     <div className="font-semibold text-gray-900 mt-3 mb-1">Customer note</div>

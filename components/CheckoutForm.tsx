@@ -4,7 +4,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { Product } from "@/lib/products";
-import { MAX_QUANTITY_PER_ITEM, SHIPPING_PAISE, formatInr, toPaise } from "@/lib/pricing";
+import {
+  MAX_QUANTITY_PER_ITEM,
+  SHIPPING_PAISE,
+  UPI_PAYEE_NAME,
+  UPI_QR_IMAGE,
+  formatInr,
+  toPaise,
+} from "@/lib/pricing";
 
 const INDIAN_STATES = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa",
@@ -31,6 +38,7 @@ const FieldError = ({ messages }: { messages?: string[] }) =>
 const CheckoutForm = ({ product }: { product: Product }) => {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
+  const [payment, setPayment] = useState<"cod" | "upi">("cod");
   const [status, setStatus] = useState<"idle" | "placing">("idle");
   const [formError, setFormError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -53,7 +61,8 @@ const CheckoutForm = ({ product }: { product: Product }) => {
     const data = new FormData(event.currentTarget);
     const payload = {
       items: [{ slug: product.slug, quantity }],
-      paymentMethod: "cod" as const,
+      paymentMethod: payment,
+      upiReference: payment === "upi" ? String(data.get("upiReference") ?? "") : "",
       customer: {
         name: String(data.get("name") ?? ""),
         email: String(data.get("email") ?? ""),
@@ -181,18 +190,105 @@ const CheckoutForm = ({ product }: { product: Product }) => {
 
         <section className="bg-white rounded-2xl border border-gray-200 p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Payment</h2>
-          <div className="flex items-start gap-3 p-4 rounded-xl border-2 border-[#EAA832] bg-[#EAA832]/5">
-            <svg className="w-6 h-6 shrink-0 text-[#EAA832] mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-            </svg>
-            <div>
-              <p className="font-semibold text-gray-900">Cash on Delivery</p>
-              <p className="text-sm text-gray-600 mt-0.5">
-                Pay {formatInr(totalPaise)} in cash when your order arrives. We will call to
-                confirm before dispatch.
-              </p>
-            </div>
+
+          <div className="space-y-3">
+            <label
+              className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-colors ${
+                payment === "cod"
+                  ? "border-[#EAA832] bg-[#EAA832]/5"
+                  : "border-gray-200 hover:border-gray-300"
+              }`}
+            >
+              <input
+                type="radio" name="paymentMethod" value="cod"
+                checked={payment === "cod"}
+                onChange={() => setPayment("cod")}
+                className="mt-1 accent-[#EAA832]"
+              />
+              <div>
+                <p className="font-semibold text-gray-900">Cash on Delivery</p>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Pay {formatInr(totalPaise)} in cash when your order arrives. We will call to
+                  confirm before dispatch.
+                </p>
+              </div>
+            </label>
+
+            <label
+              className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-colors ${
+                payment === "upi"
+                  ? "border-[#EAA832] bg-[#EAA832]/5"
+                  : "border-gray-200 hover:border-gray-300"
+              }`}
+            >
+              <input
+                type="radio" name="paymentMethod" value="upi"
+                checked={payment === "upi"}
+                onChange={() => setPayment("upi")}
+                className="mt-1 accent-[#EAA832]"
+              />
+              <div>
+                <p className="font-semibold text-gray-900">Pay now by UPI</p>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Scan the QR with GPay, PhonePe, Paytm or any UPI app.
+                </p>
+              </div>
+            </label>
           </div>
+
+          {payment === "upi" && (
+            <div className="mt-5 pt-5 border-t border-gray-200 space-y-5">
+              <ol className="space-y-2 text-sm text-gray-700 list-decimal pl-5">
+                <li>
+                  Scan the QR code below and pay exactly{" "}
+                  <strong className="text-gray-900">{formatInr(totalPaise)}</strong>. The code does
+                  not fill the amount in for you.
+                </li>
+                <li>Copy the UPI reference or transaction ID your app shows afterwards.</li>
+                <li>Enter it below and place your order.</li>
+              </ol>
+
+              {/* The QR is a fixed image, so it stays light in dark mode: an
+                  inverted QR will not scan on many phones. */}
+              <div className="flex justify-center">
+                <div data-theme-fixed className="bg-white p-4 rounded-2xl border border-gray-200">
+                  <Image
+                    src={UPI_QR_IMAGE}
+                    alt={`UPI QR code to pay ${UPI_PAYEE_NAME}`}
+                    width={240}
+                    height={240}
+                    className="w-56 h-56 object-contain"
+                    unoptimized
+                  />
+                </div>
+              </div>
+
+              <p className="text-center text-2xl font-bold text-gray-900">
+                {formatInr(totalPaise)}
+              </p>
+
+              <p className="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+                Your UPI app will show the payee as{" "}
+                <strong className="text-gray-900">{UPI_PAYEE_NAME}</strong>. That is the company
+                behind VoltLabs, so this is the right account.
+              </p>
+
+              <div>
+                <label htmlFor="upiReference" className={labelClass}>
+                  UPI reference / transaction ID
+                </label>
+                <input
+                  id="upiReference" name="upiReference" required
+                  autoComplete="off" className={inputClass}
+                  placeholder="e.g. 412345678901"
+                />
+                <FieldError messages={fieldErrors.upiReference} />
+                <p className="text-sm text-gray-500 mt-1.5">
+                  Shown as UPI transaction ID, UTR or reference number in your payment app.
+                </p>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Honeypot: hidden from people, irresistible to bots. */}
@@ -209,7 +305,11 @@ const CheckoutForm = ({ product }: { product: Product }) => {
           disabled={status === "placing"}
           className="w-full bg-[#EAA832] hover:bg-[#D4922A] disabled:bg-[#EAA832]/50 disabled:cursor-not-allowed text-white py-4 rounded-xl font-semibold text-lg transition-all hover:shadow-lg hover:shadow-[#EAA832]/30 flex items-center justify-center gap-2 cursor-pointer"
         >
-          {status === "placing" ? "Placing your order..." : `Place order · ${formatInr(totalPaise)}`}
+          {status === "placing"
+            ? "Placing your order..."
+            : payment === "upi"
+              ? `I have paid · Place order · ${formatInr(totalPaise)}`
+              : `Place order · ${formatInr(totalPaise)}`}
         </button>
 
         <p className="text-sm text-gray-500 text-center">

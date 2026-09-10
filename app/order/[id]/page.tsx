@@ -60,6 +60,13 @@ export default async function OrderPage({
               Thank you, {order.customerName.split(" ")[0]}. We have your order and will call
               you on {order.customerPhone} to confirm before dispatch.
             </p>
+            {order.paymentMethod === "upi" && (
+              <p className="text-gray-600 mt-2 text-sm">
+                We will verify your UPI payment
+                {order.upiReference ? ` (reference ${order.upiReference})` : ""} and confirm.
+                Nothing more to pay on delivery.
+              </p>
+            )}
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
@@ -69,7 +76,11 @@ export default async function OrderPage({
                 <p className="text-xl font-bold text-gray-900">{formatOrderNo(order.orderNo)}</p>
               </div>
               <span className="px-3 py-1.5 rounded-full bg-[#EAA832]/10 text-[#D4922A] text-sm font-semibold">
-                {order.paymentMethod === "cod" ? "Cash on Delivery" : "Paid online"}
+                {order.paymentMethod === "cod"
+                  ? "Cash on Delivery"
+                  : order.paymentMethod === "upi"
+                    ? "Paid by UPI"
+                    : "Paid online"}
               </span>
             </div>
 

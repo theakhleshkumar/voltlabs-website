@@ -9,6 +9,22 @@ import { getProductBySlug } from "./products";
 /** Free shipping across India, as advertised on the site. */
 export const SHIPPING_PAISE = 0;
 
+/**
+ * Payment by UPI QR.
+ *
+ * The QR is a static image, so it carries neither the amount nor the order
+ * number: the customer types the amount into their UPI app themselves, and the
+ * credit lands in the bank statement with nothing tying it to an order. The
+ * reference they enter afterwards is what makes reconciliation possible, which
+ * is why checkout asks for it rather than treating it as optional.
+ *
+ * The account is held by the company behind the VoltLabs brand, and that is
+ * the name shown in the customer's UPI app -- stated at checkout so nobody
+ * abandons a payment thinking they scanned the wrong code.
+ */
+export const UPI_QR_IMAGE = "/upi-qr.png";
+export const UPI_PAYEE_NAME = "Codemagnet Solutions Private Limited";
+
 /** Guards against a typo or a script ordering 10,000 lamps. */
 export const MAX_QUANTITY_PER_ITEM = 10;
 

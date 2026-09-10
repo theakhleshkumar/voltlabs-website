@@ -28,7 +28,9 @@ export const orderStatus = pgEnum("order_status", [
   "refunded",
 ]);
 
-export const paymentMethod = pgEnum("payment_method", ["cod", "online"]);
+// Appended rather than inserted in logical order: adding a value to a Postgres
+// enum can only append, and reordering would mean rebuilding the type.
+export const paymentMethod = pgEnum("payment_method", ["cod", "online", "upi"]);
 
 export const orders = pgTable(
   "orders",
@@ -45,6 +47,14 @@ export const orders = pgTable(
     razorpayOrderId: text("razorpay_order_id").unique(),
     razorpayPaymentId: text("razorpay_payment_id"),
     razorpaySignature: text("razorpay_signature"),
+
+    /**
+     * The UPI transaction reference the customer types in after paying by QR.
+     * A static QR carries no amount and no order number, so the bank statement
+     * shows an unattributed credit; this is the only thread tying that payment
+     * back to an order. Null for every other payment method.
+     */
+    upiReference: text("upi_reference"),
 
     currency: text("currency").notNull().default("INR"),
     subtotalPaise: integer("subtotal_paise").notNull(),

@@ -39,7 +39,19 @@ const requestSchema = z.object({
     )
     .min(1)
     .max(10),
-  paymentMethod: z.enum(["cod", "online"]).default("cod"),
+  paymentMethod: z.enum(["cod", "upi", "online"]).default("cod"),
+  /**
+   * UPI transaction reference, entered after paying by QR. Required for UPI
+   * because it is the only link between an unattributed bank credit and this
+   * order. Banks and apps format it differently, so this only checks it looks
+   * like a reference rather than pinning a single shape.
+   */
+  upiReference: z
+    .string()
+    .trim()
+    .regex(/^[A-Za-z0-9-]{6,35}$/, "Enter the UPI reference or transaction ID from your payment app.")
+    .optional()
+    .or(z.literal("")),
   customer: z.object({
     name: z.string().trim().min(2, "Enter your full name.").max(120),
     email: z.string().trim().toLowerCase().email("Enter a valid email address."),
@@ -83,7 +95,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const { items, customer, address, notes, paymentMethod } = parsed.data;
+  const { items, customer, address, notes, paymentMethod, upiReference } = parsed.data;
+
+  // Without a reference a UPI payment cannot be matched to its order, so the
+  // order is refused rather than accepted and left unreconcilable.
+  if (paymentMethod === "upi" && !upiReference) {
+    return NextResponse.json(
+      {
+        error: "Please enter the UPI reference shown in your payment app after paying.",
+        fields: {
+          upiReference: ["Enter the UPI reference or transaction ID from your payment app."],
+        },
+      },
+      { status: 400 },
+    );
+  }
 
   // Online payment is only offered when Razorpay is actually configured, so a
   // half-configured deployment cannot strand a customer at a broken payment step.
@@ -161,6 +187,7 @@ export async function POST(request: Request) {
           state: address.state,
           pincode: address.pincode,
           notes: notes || null,
+          upiReference: paymentMethod === "upi" ? upiReference || null : null,
           ipHash,
         })
         .returning();
@@ -199,7 +226,8 @@ export async function POST(request: Request) {
     });
   }
 
-  // COD is complete at this point. Both emails are best-effort: the order is
+  // COD and UPI are both complete at this point -- the money is either owed on
+  // delivery or already transferred. Both emails are best-effort: the order is
   // already saved, so a mail outage must never turn a real order into an error
   // page. They are sent together rather than in sequence so a slow provider
   // does not double the customer's wait.
@@ -207,7 +235,8 @@ export async function POST(request: Request) {
     orderNo: order.orderNo,
     orderId: order.id,
     placedAt: order.createdAt,
-    paymentMethod: "cod" as const,
+    paymentMethod: paymentMethod as "cod" | "upi",
+    upiReference: upiReference || null,
     customer,
     address,
     items: priced.items,

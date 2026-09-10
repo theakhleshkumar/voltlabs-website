@@ -15,7 +15,8 @@ export interface OrderEmailPayload {
   orderNo: number;
   orderId: string;
   placedAt: Date;
-  paymentMethod: "cod" | "online";
+  paymentMethod: "cod" | "upi" | "online";
+  upiReference?: string | null;
   customer: { name: string; email: string; phone: string };
   address: {
     line1: string;
@@ -33,6 +34,16 @@ export interface OrderEmailPayload {
 
 export const formatOrderNo = (orderNo: number): string =>
   `VL-${String(orderNo).padStart(5, "0")}`;
+
+const paymentLineForShop = (p: OrderEmailPayload): string => {
+  if (p.paymentMethod === "cod") {
+    return `Payment: CASH ON DELIVERY — collect ${formatInr(p.totalPaise)}`;
+  }
+  if (p.paymentMethod === "upi") {
+    return `Payment: UPI — customer says paid ${formatInr(p.totalPaise)}, ref ${p.upiReference ?? "(none given)"}. VERIFY IN BANK BEFORE DISPATCH.`;
+  }
+  return "Payment: paid online";
+};
 
 const esc = (value: string): string =>
   value.replace(/[&<>"']/g, (c) =>
@@ -63,9 +74,7 @@ const shopText = (p: OrderEmailPayload): string =>
   [
     `Order ${formatOrderNo(p.orderNo)}`,
     `Placed ${inIst(p.placedAt)} IST`,
-    p.paymentMethod === "cod"
-      ? `Payment: CASH ON DELIVERY — collect ${formatInr(p.totalPaise)}`
-      : "Payment: paid online",
+    paymentLineForShop(p),
     "",
     "CUSTOMER",
     `  ${p.customer.name}`,
@@ -91,9 +100,16 @@ const shopHtml = (p: OrderEmailPayload): string => `
   <h2 style="margin:0 0 4px">Order ${formatOrderNo(p.orderNo)}</h2>
   <p style="margin:0 0 16px;color:#5a6472;font-size:14px">${esc(inIst(p.placedAt))} IST</p>
   <p style="margin:0 0 20px;padding:10px 14px;border-radius:6px;background:${
-    p.paymentMethod === "cod" ? "#fdf4e3" : "#eaf4ef"
+    p.paymentMethod === "online" ? "#eaf4ef" : p.paymentMethod === "cod" ? "#fdf4e3" : "#e8eef8"
   };font-weight:600">
-    ${p.paymentMethod === "cod" ? `Cash on delivery — collect ${esc(formatInr(p.totalPaise))}` : "Paid online"}
+    ${
+      p.paymentMethod === "cod"
+        ? `Cash on delivery — collect ${esc(formatInr(p.totalPaise))}`
+        : p.paymentMethod === "upi"
+          ? `UPI — customer says paid ${esc(formatInr(p.totalPaise))}<br>
+             <span style="font-weight:400;font-size:14px">Reference: ${esc(p.upiReference ?? "(none given)")} — verify in your bank before dispatch</span>`
+          : "Paid online"
+    }
   </p>
   <h3 style="margin:0 0 6px;font-size:15px">Customer</h3>
   <p style="margin:0 0 18px;line-height:1.6">
@@ -126,7 +142,9 @@ const shopHtml = (p: OrderEmailPayload): string => `
 export const sendOrderNotification = async (p: OrderEmailPayload) =>
   sendMail({
     to: env.email.notificationAddress(),
-    subject: `New ${p.paymentMethod === "cod" ? "COD" : "prepaid"} order ${formatOrderNo(
+    subject: `New ${
+      p.paymentMethod === "cod" ? "COD" : p.paymentMethod === "upi" ? "UPI" : "prepaid"
+    } order ${formatOrderNo(
       p.orderNo,
     )} — ${formatInr(p.totalPaise)}`,
     text: shopText(p),
@@ -143,7 +161,9 @@ const customerText = (p: OrderEmailPayload): string =>
   [
     `Hi ${p.customer.name.split(" ")[0]},`,
     "",
-    `Thank you for your order. We have it, and we will call you on ${p.customer.phone} to confirm before we dispatch.`,
+    p.paymentMethod === "upi"
+      ? `Thank you for your order. We have it, and we will confirm your UPI payment and call you on ${p.customer.phone} before we dispatch.`
+      : `Thank you for your order. We have it, and we will call you on ${p.customer.phone} to confirm before we dispatch.`,
     "",
     `Order number: ${formatOrderNo(p.orderNo)}`,
     `Placed: ${inIst(p.placedAt)} IST`,
@@ -155,7 +175,9 @@ const customerText = (p: OrderEmailPayload): string =>
     `  Shipping  ${p.shippingPaise === 0 ? "Free" : formatInr(p.shippingPaise)}`,
     p.paymentMethod === "cod"
       ? `  PAY ON DELIVERY  ${formatInr(p.totalPaise)}`
-      : `  PAID  ${formatInr(p.totalPaise)}`,
+      : p.paymentMethod === "upi"
+        ? `  PAID BY UPI  ${formatInr(p.totalPaise)}  (ref ${p.upiReference ?? "-"})`
+        : `  PAID  ${formatInr(p.totalPaise)}`,
     "",
     "DELIVERING TO",
     ...addressLines(p).map((line) => `  ${line}`),
@@ -193,7 +215,7 @@ const customerHtml = (p: OrderEmailPayload): string => `
     </tr>
     <tr>
       <td style="padding:8px 0;font-weight:700;border-top:2px solid #14181f">
-        ${p.paymentMethod === "cod" ? "Pay on delivery" : "Paid"}
+        ${p.paymentMethod === "cod" ? "Pay on delivery" : p.paymentMethod === "upi" ? "Paid by UPI" : "Paid"}
       </td>
       <td style="padding:8px 0;font-weight:700;text-align:right;border-top:2px solid #14181f">${esc(formatInr(p.totalPaise))}</td>
     </tr>

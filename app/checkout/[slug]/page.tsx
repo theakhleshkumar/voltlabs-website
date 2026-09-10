@@ -21,7 +21,7 @@ export async function generateMetadata({
 
   return {
     title: `Checkout — ${product.name}`,
-    description: `Order the ${product.name} with cash on delivery and free shipping across India.`,
+    description: `Order the ${product.name} by UPI or cash on delivery, with free shipping across India.`,
     // A checkout page has no business in search results.
     robots: { index: false, follow: false },
   };
@@ -64,7 +64,7 @@ export default async function CheckoutPage({
           <div className="mb-8">
             <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">Checkout</h1>
             <p className="text-gray-600 mt-2">
-              Free delivery across India. Pay in cash when your order arrives.
+              Free delivery across India. Pay by UPI now, or in cash when your order arrives.
             </p>
           </div>
 
