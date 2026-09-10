@@ -16,7 +16,6 @@ export interface OrderEmailPayload {
   orderId: string;
   placedAt: Date;
   paymentMethod: "cod" | "upi" | "online";
-  upiReference?: string | null;
   customer: { name: string; email: string; phone: string };
   address: {
     line1: string;
@@ -40,7 +39,11 @@ const paymentLineForShop = (p: OrderEmailPayload): string => {
     return `Payment: CASH ON DELIVERY — collect ${formatInr(p.totalPaise)}`;
   }
   if (p.paymentMethod === "upi") {
-    return `Payment: UPI — customer says paid ${formatInr(p.totalPaise)}, ref ${p.upiReference ?? "(none given)"}. VERIFY IN BANK BEFORE DISPATCH.`;
+    return (
+      `Payment: UPI — customer says they paid ${formatInr(p.totalPaise)}\n` +
+      `VERIFY BEFORE DISPATCH: look for ${formatInr(p.totalPaise)} in the account ` +
+      `around ${inIst(p.placedAt)} IST.`
+    );
   }
   return "Payment: paid online";
 };
@@ -106,8 +109,8 @@ const shopHtml = (p: OrderEmailPayload): string => `
       p.paymentMethod === "cod"
         ? `Cash on delivery — collect ${esc(formatInr(p.totalPaise))}`
         : p.paymentMethod === "upi"
-          ? `UPI — customer says paid ${esc(formatInr(p.totalPaise))}<br>
-             <span style="font-weight:400;font-size:14px">Reference: ${esc(p.upiReference ?? "(none given)")} — verify in your bank before dispatch</span>`
+          ? `UPI — customer says they paid ${esc(formatInr(p.totalPaise))}<br>
+             <span style="font-weight:400;font-size:14px">Verify before dispatch: look for ${esc(formatInr(p.totalPaise))} around ${esc(inIst(p.placedAt))} IST</span>`
           : "Paid online"
     }
   </p>
@@ -176,7 +179,7 @@ const customerText = (p: OrderEmailPayload): string =>
     p.paymentMethod === "cod"
       ? `  PAY ON DELIVERY  ${formatInr(p.totalPaise)}`
       : p.paymentMethod === "upi"
-        ? `  PAID BY UPI  ${formatInr(p.totalPaise)}  (ref ${p.upiReference ?? "-"})`
+        ? `  PAID BY UPI  ${formatInr(p.totalPaise)}`
         : `  PAID  ${formatInr(p.totalPaise)}`,
     "",
     "DELIVERING TO",

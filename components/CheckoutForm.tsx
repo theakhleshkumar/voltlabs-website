@@ -62,7 +62,6 @@ const CheckoutForm = ({ product }: { product: Product }) => {
     const payload = {
       items: [{ slug: product.slug, quantity }],
       paymentMethod: payment,
-      upiReference: payment === "upi" ? String(data.get("upiReference") ?? "") : "",
       customer: {
         name: String(data.get("name") ?? ""),
         email: String(data.get("email") ?? ""),
@@ -240,12 +239,11 @@ const CheckoutForm = ({ product }: { product: Product }) => {
             <div className="mt-5 pt-5 border-t border-gray-200 space-y-5">
               <ol className="space-y-2 text-sm text-gray-700 list-decimal pl-5">
                 <li>
-                  Scan the QR code below and pay exactly{" "}
+                  Scan the QR code with any UPI app and pay exactly{" "}
                   <strong className="text-gray-900">{formatInr(totalPaise)}</strong>. The code does
                   not fill the amount in for you.
                 </li>
-                <li>Copy the UPI reference or transaction ID your app shows afterwards.</li>
-                <li>Enter it below and place your order.</li>
+                <li>Come back here and place your order.</li>
               </ol>
 
               {/* The QR is a fixed image, so it stays light in dark mode: an
@@ -273,20 +271,10 @@ const CheckoutForm = ({ product }: { product: Product }) => {
                 behind VoltLabs, so this is the right account.
               </p>
 
-              <div>
-                <label htmlFor="upiReference" className={labelClass}>
-                  UPI reference / transaction ID
-                </label>
-                <input
-                  id="upiReference" name="upiReference" required
-                  autoComplete="off" className={inputClass}
-                  placeholder="e.g. 412345678901"
-                />
-                <FieldError messages={fieldErrors.upiReference} />
-                <p className="text-sm text-gray-500 mt-1.5">
-                  Shown as UPI transaction ID, UTR or reference number in your payment app.
-                </p>
-              </div>
+              <p className="text-sm text-gray-600">
+                We check the payment against our account before dispatching, and call you if
+                anything does not match.
+              </p>
             </div>
           )}
         </section>

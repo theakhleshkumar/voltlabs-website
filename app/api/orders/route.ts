@@ -41,17 +41,12 @@ const requestSchema = z.object({
     .max(10),
   paymentMethod: z.enum(["cod", "upi", "online"]).default("cod"),
   /**
-   * UPI transaction reference, entered after paying by QR. Required for UPI
-   * because it is the only link between an unattributed bank credit and this
-   * order. Banks and apps format it differently, so this only checks it looks
-   * like a reference rather than pinning a single shape.
+   * Optional UPI reference. Checkout no longer asks for it -- customers do not
+   * reliably have it to hand, and it was friction on the one screen that must
+   * not have any. The column stays so it can be filled from the admin panel,
+   * or required again if reconciliation by amount and time stops scaling.
    */
-  upiReference: z
-    .string()
-    .trim()
-    .regex(/^[A-Za-z0-9-]{6,35}$/, "Enter the UPI reference or transaction ID from your payment app.")
-    .optional()
-    .or(z.literal("")),
+  upiReference: z.string().trim().max(35).optional().or(z.literal("")),
   customer: z.object({
     name: z.string().trim().min(2, "Enter your full name.").max(120),
     email: z.string().trim().toLowerCase().email("Enter a valid email address."),
@@ -96,20 +91,6 @@ export async function POST(request: Request) {
   }
 
   const { items, customer, address, notes, paymentMethod, upiReference } = parsed.data;
-
-  // Without a reference a UPI payment cannot be matched to its order, so the
-  // order is refused rather than accepted and left unreconcilable.
-  if (paymentMethod === "upi" && !upiReference) {
-    return NextResponse.json(
-      {
-        error: "Please enter the UPI reference shown in your payment app after paying.",
-        fields: {
-          upiReference: ["Enter the UPI reference or transaction ID from your payment app."],
-        },
-      },
-      { status: 400 },
-    );
-  }
 
   // Online payment is only offered when Razorpay is actually configured, so a
   // half-configured deployment cannot strand a customer at a broken payment step.
@@ -236,7 +217,6 @@ export async function POST(request: Request) {
     orderId: order.id,
     placedAt: order.createdAt,
     paymentMethod: paymentMethod as "cod" | "upi",
-    upiReference: upiReference || null,
     customer,
     address,
     items: priced.items,

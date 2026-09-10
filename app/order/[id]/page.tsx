@@ -62,9 +62,8 @@ export default async function OrderPage({
             </p>
             {order.paymentMethod === "upi" && (
               <p className="text-gray-600 mt-2 text-sm">
-                We will verify your UPI payment
-                {order.upiReference ? ` (reference ${order.upiReference})` : ""} and confirm.
-                Nothing more to pay on delivery.
+                We will check your UPI payment against our account and confirm. Nothing more
+                to pay on delivery.
               </p>
             )}
           </div>

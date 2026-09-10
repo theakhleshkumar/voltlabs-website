@@ -19,7 +19,6 @@ export interface AdminOrder {
   orderNo: number;
   status: OrderStatus;
   paymentMethod: "cod" | "online" | "upi";
-  upiReference: string | null;
   totalPaise: number;
   customerName: string;
   customerPhone: string;
@@ -181,12 +180,15 @@ const OrderRow = ({ order }: { order: AdminOrder }) => {
                 <p className="text-gray-700">{order.customerEmail}</p>
                 {order.paymentMethod === "upi" && (
                   <>
-                    <div className="font-semibold text-gray-900 mt-3 mb-1">UPI reference</div>
-                    <p className="font-mono text-gray-900 select-all">
-                      {order.upiReference ?? "not provided"}
-                    </p>
-                    <p className="text-gray-600 mt-1">
-                      Match this against your bank before dispatching, then set the status to paid.
+                    <div className="font-semibold text-gray-900 mt-3 mb-1">Verify this payment</div>
+                    <p className="text-gray-700">
+                      Look for{" "}
+                      <strong className="font-mono">{formatInr(order.totalPaise)}</strong> in the
+                      account around{" "}
+                      {new Date(order.createdAt).toLocaleString("en-IN", {
+                        timeZone: "Asia/Kolkata",
+                      })}
+                      . Set the status to paid once it is there, then dispatch.
                     </p>
                   </>
                 )}

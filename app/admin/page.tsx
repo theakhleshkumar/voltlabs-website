@@ -89,7 +89,6 @@ export default async function AdminPage() {
     orderNo: row.orderNo,
     status: row.status,
     paymentMethod: row.paymentMethod,
-    upiReference: row.upiReference,
     totalPaise: row.totalPaise,
     customerName: row.customerName,
     customerPhone: row.customerPhone,
