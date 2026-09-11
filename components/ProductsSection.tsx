@@ -1,125 +1,103 @@
 import Image from "next/image";
 import Link from "next/link";
+import { formatInr, toPaise } from "@/lib/pricing";
+import { products } from "@/lib/products";
 
-const ProductsSection = () => {
-  const products = [
-    {
-      slug: "smart-table-rgb-touch-lamp",
-      name: "Smart Table RGB Touch Lamp",
-      description: "Touch Sensor Table Lamp, RGB Color Changing Night Light, 7 Colors, USB Powered, Bedside and Desk Light with Tap Control",
-      price: "₹799",
-      originalPrice: "₹2,999",
-      image: "/product-lamp-rgb.png",
-      badge: "Best Seller",
-      features: ["Smart Lamp", "Night Lamp", "Table Lamp", "Touch Control", "7 Colors", "RGB", "USB Powered"],
-    },
-    {
-      slug: "smart-table-touch-lamp",
-      name: "Smart Table Touch Lamp",
-      description: "Smart LED Touch Control Bedside Lamp | 3-Way Dimmable (10%, 50%, 100%) | Compact, Stylish, Modern Table Light for Bedroom, Study & Living Room",
-      price: "₹799",
-      originalPrice: "₹2,999",
-      image: "/product-lamp-warm.jpg",
-      badge: "New",
-      features: ["3-Way Dimming", "Touch Control", "LED", "Energy Efficient", "Made in India"],
-    },
-    {
-      slug: "modern-spiral-table-lamp",
-      name: "Modern Spiral Table Lamp",
-      description: "Modern Spiral Table Lamp with 3 Light Modes (Warm, Cool & Natural White) | E27 LED Bedside Night Lamp for Bedroom, Living Room & Home Décor | Touch Switch | Flicker-Free",
-      price: "₹749",
-      originalPrice: "₹1,499",
-      image: "/product-lamp-spiral.jpg",
-      badge: "Premium",
-      features: ["3 Light Modes", "E27 LED", "Touch Switch", "Flicker-Free", "Made in India"],
-    }
-  ];
+/**
+ * The homepage product grid.
+ *
+ * Reads lib/products.ts rather than keeping its own copy. It used to hold a
+ * second hardcoded list, which meant adding or repricing a product needed two
+ * edits and the two could silently disagree about price or description.
+ */
+const ProductsSection = () => (
+  <section id="products" className="py-24 bg-gray-50">
+    <div className="max-w-7xl mx-auto px-6">
+      <div className="text-center mb-16">
+        <span className="inline-block bg-[#EAA832]/10 text-[#D4922A] px-4 py-2 rounded-full text-sm font-semibold mb-4">OUR PRODUCTS</span>
+        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          Smart Devices for Every Home
+        </h2>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          Discover our collection of smart IoT products designed to make your home smarter and more connected.
+        </p>
+      </div>
 
-  return (
-    <section id="products" className="py-24 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <span className="inline-block bg-[#EAA832]/10 text-[#D4922A] px-4 py-2 rounded-full text-sm font-semibold mb-4">OUR PRODUCTS</span>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Smart Devices for Every Home
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover our collection of smart IoT products designed to make your home smarter and more connected.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
-            <div 
-              key={index}
-              className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col"
-            >
-              {/* data-theme-fixed: the product shots are photographed on white,
-                  so the plate behind them stays light in both themes. */}
-              <Link data-theme-fixed href={`/product/${product.slug}`} className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 p-8">
-                <span className="absolute top-4 left-4 bg-[#EAA832] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
-                  {product.badge}
-                </span>
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
-                />
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {products.map((product) => (
+          <div
+            key={product.slug}
+            className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col"
+          >
+            {/* data-theme-fixed: the product shots are photographed on white,
+                so the plate behind them stays light in both themes. */}
+            <Link data-theme-fixed href={`/product/${product.slug}`} className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 p-8">
+              <span className="absolute top-4 left-4 bg-[#EAA832] text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+                {product.badge}
+              </span>
+              <Image
+                src={product.images[0]}
+                alt={product.name}
+                fill
+                className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+              />
+            </Link>
+            <div className="p-6 flex flex-col flex-1">
+              <Link href={`/product/${product.slug}`}>
+                <h3 className="text-xl font-bold text-gray-900 mb-2 hover:text-[#EAA832] transition-colors">{product.name}</h3>
               </Link>
-              <div className="p-6 flex flex-col flex-1">
-                <Link href={`/product/${product.slug}`}>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 hover:text-[#EAA832] transition-colors">{product.name}</h3>
-                </Link>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {product.features.slice(0, 4).map((feature, i) => (
-                    <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                      {feature}
-                    </span>
-                  ))}
+              <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.shortDescription}</p>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {product.features.slice(0, 4).map((feature) => (
+                  <span key={feature} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                    {feature}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between mt-auto pt-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold text-[#EAA832]">
+                    {formatInr(toPaise(product.price))}
+                  </span>
+                  <span className="text-sm text-gray-400 line-through">
+                    {formatInr(toPaise(product.originalPrice))}
+                  </span>
                 </div>
-                
-                <div className="flex items-center justify-between mt-auto pt-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-[#EAA832]">{product.price}</span>
-                    <span className="text-sm text-gray-400 line-through">{product.originalPrice}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Link 
-                      href={`/product/${product.slug}`}
-                      className="border border-gray-300 hover:border-[#EAA832] text-gray-700 hover:text-[#EAA832] px-3 py-2 rounded-full text-sm font-semibold transition-colors"
-                    >
-                      Details
-                    </Link>
-                    {/* bg-gray-900 turns light in dark mode along with the rest of
-                        the text ramp, so this dark pill needs its own shade. */}
-                    <Link
-                      href={`/checkout/${product.slug}`}
-                      className="bg-gray-900 dark:bg-[#2b313d] hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
-                    >
-                      Buy Now
-                    </Link>
-                  </div>
+                <div className="flex gap-2">
+                  <Link
+                    href={`/product/${product.slug}`}
+                    className="border border-gray-300 hover:border-[#EAA832] text-gray-700 hover:text-[#EAA832] px-3 py-2 rounded-full text-sm font-semibold transition-colors"
+                  >
+                    Details
+                  </Link>
+                  {/* bg-gray-900 turns light in dark mode along with the rest of
+                      the text ramp, so this dark pill needs its own shade. */}
+                  <Link
+                    href={`/checkout/${product.slug}`}
+                    className="bg-gray-900 dark:bg-[#2b313d] hover:bg-[#EAA832] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors"
+                  >
+                    Buy Now
+                  </Link>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">More products coming soon!</p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500">
-            <span className="bg-white px-4 py-2 rounded-full border">Smart Switches</span>
-            <span className="bg-white px-4 py-2 rounded-full border">Smart Extension Boards</span>
-            <span className="bg-white px-4 py-2 rounded-full border">Smart Bulbs</span>
-            <span className="bg-white px-4 py-2 rounded-full border">Motion Sensors</span>
           </div>
+        ))}
+      </div>
+
+      <div className="text-center mt-12">
+        <p className="text-gray-600 mb-4">More products coming soon!</p>
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500">
+          <span className="bg-white px-4 py-2 rounded-full border">Smart Switches</span>
+          <span className="bg-white px-4 py-2 rounded-full border">Smart Extension Boards</span>
+          <span className="bg-white px-4 py-2 rounded-full border">Smart Bulbs</span>
+          <span className="bg-white px-4 py-2 rounded-full border">Motion Sensors</span>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default ProductsSection;

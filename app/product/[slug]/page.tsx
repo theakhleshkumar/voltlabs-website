@@ -51,6 +51,10 @@ export async function generateMetadata({
 
 // Star Rating Component
 const StarRating = ({ rating, reviewCount }: { rating: number; reviewCount: number }) => {
+  // Nothing to show for a product nobody has reviewed. "0 (0 reviews)" reads
+  // worse than no rating at all.
+  if (reviewCount < 1) return null;
+
   return (
     <div className="flex items-center gap-2">
       <div className="flex">
@@ -225,30 +229,34 @@ export default async function ProductPage({
         }
       }
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": product.rating,
-      "bestRating": 5,
-      "worstRating": 1,
-      "reviewCount": product.reviewCount
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": product.rating,
-          "bestRating": 5,
-          "worstRating": 1
-        },
-        "author": {
-          "@type": "Person",
-          "name": "Verified Buyer"
-        },
-        "reviewBody": `Great ${product.name}! Works exactly as described. Good quality and value for money.`,
-        "datePublished": "2026-03-01"
-      }
-    ]
+    // Only claim a rating for products that actually have reviews. Emitting
+    // a zero aggregateRating, or a review nobody wrote, is a false claim and
+    // breaches Google's review snippet guidelines.
+    ...(product.reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.rating,
+            bestRating: 5,
+            worstRating: 1,
+            reviewCount: product.reviewCount,
+          },
+          review: [
+            {
+              "@type": "Review",
+              reviewRating: {
+                "@type": "Rating",
+                ratingValue: product.rating,
+                bestRating: 5,
+                worstRating: 1,
+              },
+              author: { "@type": "Person", name: "Verified Buyer" },
+              reviewBody: `Great ${product.name}! Works exactly as described. Good quality and value for money.`,
+              datePublished: "2026-03-01",
+            },
+          ],
+        }
+      : {}),
   };
 
   return (

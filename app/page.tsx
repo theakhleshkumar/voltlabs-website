@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductsSection from "@/components/ProductsSection";
+import { products } from "@/lib/products";
 
 // Hero Section
 const HeroSection = () => (
@@ -833,53 +834,37 @@ const jsonLd = {
         "@id": "https://voltlabs.in/#organization"
       }
     },
-    {
+    // Generated from the catalogue. These were hand-written and had already
+    // drifted: the spiral lamp was advertised here at 799 while checkout
+    // charged 749, and a review count was claimed that the catalogue does not
+    // support. Misstating either in structured data is a Google policy issue
+    // as well as a customer-facing lie.
+    ...products.map((product) => ({
       "@type": "Product",
-      "name": "Smart Table RGB Touch Lamp",
-      "image": "https://voltlabs.in/product-lamp-rgb.png",
-      "description": "16M+ colors LED RGB touch-sensitive table lamp with app & voice control. Perfect for bedroom, living room, and gifting.",
-      "brand": {
-        "@type": "Brand",
-        "name": "VoltLabs"
-      },
-      "offers": {
+      name: product.name,
+      image: `https://voltlabs.in${product.images[0]}`,
+      description: product.shortDescription,
+      brand: { "@type": "Brand", name: "VoltLabs" },
+      offers: {
         "@type": "Offer",
-        "url": "https://voltlabs.in/product/smart-table-rgb-touch-lamp",
-        "priceCurrency": "INR",
-        "price": "799",
-        "availability": "https://schema.org/InStock",
-        "seller": {
-          "@type": "Organization",
-          "name": "VoltLabs"
-        }
+        url: `https://voltlabs.in/product/${product.slug}`,
+        priceCurrency: product.currency,
+        price: String(product.price),
+        availability: product.inStock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        seller: { "@type": "Organization", name: "VoltLabs" },
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.5",
-        "reviewCount": "50"
-      }
-    },
-    {
-      "@type": "Product",
-      "name": "Modern Spiral Table Lamp",
-      "image": "https://voltlabs.in/product-lamp-spiral.jpg",
-      "description": "Elegant spiral design table lamp with warm lighting. Touch-sensitive controls, modern decor piece for any room.",
-      "brand": {
-        "@type": "Brand",
-        "name": "VoltLabs"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://voltlabs.in/product/modern-spiral-table-lamp",
-        "priceCurrency": "INR",
-        "price": "799",
-        "availability": "https://schema.org/InStock",
-        "seller": {
-          "@type": "Organization",
-          "name": "VoltLabs"
-        }
-      }
-    },
+      ...(product.reviewCount > 0
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: String(product.rating),
+              reviewCount: String(product.reviewCount),
+            },
+          }
+        : {}),
+    })),
     {
       "@type": "FAQPage",
       "mainEntity": [

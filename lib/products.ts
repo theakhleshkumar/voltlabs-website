@@ -147,6 +147,56 @@ export const products: Product[] = [
     inStock: true,
     rating: 4.4,
     reviewCount: 2
+  },
+  {
+    slug: "glowsync-sl01-smart-rgb-table-lamp",
+    name: "GlowSync SL01 Smart RGB Table Lamp",
+    shortDescription: "App-Controlled Bedside Lamp with 16 Million Colours, Scenes & Scheduling",
+    description: "The VoltLabs GlowSync SL01 is a smart table lamp for people who want light that fits the moment rather than one fixed white bulb. Pair it with the free VoltLabs Android app to pick any shade from the colour wheel, or type exact RGB values when you have found a colour you want back again. Brightness runs from a dim night-light glow up to full reading light. Preset scenes move the lamp between reading, work, relax, movie and party in a single tap, including dynamic modes that fade slowly between colours on their own. Schedules are handled by the lamp itself rather than the phone, so they keep working whether your phone is nearby or not. When you would rather not reach for a phone at all, the touch panel on the base covers on, off, brightness and colour cycling directly. Runs on 5V over USB-C from any standard phone adapter or power bank.",
+    price: 1499,
+    originalPrice: 2499,
+    currency: "INR",
+    images: ["/product-lamp-glowsync.jpg"],
+    badge: "App Control",
+    features: ["App Control", "16M Colours", "Scene Modes", "Scheduling Timer", "Touch Control", "USB-C Powered", "Made in India"],
+    highlights: [
+      { icon: "colors", title: "16 Million Colours", description: "Pick from the colour wheel or enter exact RGB values" },
+      { icon: "modes", title: "Scene & Mood Modes", description: "Reading, work, relax, movie and party in one tap" },
+      { icon: "touch", title: "Touch Control", description: "On, off, brightness and colour cycling without the app" },
+      { icon: "usb", title: "USB-C Powered", description: "Runs on 5V from any phone adapter or power bank" }
+    ],
+    specifications: [
+      { label: "Model Number", value: "VL-SL01" },
+      { label: "Control Method", value: "Android App, Touch" },
+      { label: "Colours", value: "16 Million RGB" },
+      { label: "Light Source", value: "LED" },
+      { label: "Power Source", value: "Corded Electric (USB-C)" },
+      { label: "Voltage", value: "5 Volts (DC)" },
+      { label: "Wattage", value: "9 Watts" },
+      { label: "Switch Type", value: "Touch" },
+      { label: "Mounting Type", value: "Tabletop" },
+      { label: "Number of Lights", value: "1" },
+      { label: "In the Box", value: "Lamp, USB-C cable, user manual" },
+      { label: "Suitable For", value: "Bedroom, Living Room, Study Room" },
+      { label: "Indoor / Outdoor", value: "Indoor" },
+      { label: "Country of Origin", value: "India" },
+      { label: "Warranty", value: "1 Year" }
+    ],
+    aboutPoints: [
+      "Control It From Your Phone – Pair the lamp with the free VoltLabs app on any Android phone to change colour, set brightness, switch scenes and run schedules from wherever you are sitting. Please note the app is currently available for Android only; an iOS version is in development.",
+      "16 Million Colours, Set by RGB Value – Pick any shade from the in-app colour wheel, or enter exact RGB values when you want a specific colour repeated every time. Brightness is adjustable across the full range, from a soft night glow to full reading light.",
+      "Scene and Mood Modes – Preset scenes shift the lamp to suit what you are doing: reading, working, relaxing, movie night or party, with a single tap. Dynamic modes cycle and fade between colours on their own.",
+      "Schedule On and Off Times – Set the lamp to switch on before you get home, wake you with a gentle glow in the morning, or turn itself off after you fall asleep. Schedules run on the lamp, so they keep working without your phone nearby.",
+      "Touch Control on the Lamp Itself – A responsive touch panel on the base handles on, off, brightness and colour cycling without opening the app.",
+      "USB-C Powered for Flexible Placement – Operates on 5V through USB-C, so it works with any standard phone adapter or power bank on a desk, bedside table or shelf without needing a dedicated wall socket.",
+      "Complete Package Included – Comes with the GlowSync SL01 lamp, a USB-C cable and a user manual, plus a 12 month VoltLabs warranty against manufacturing defects."
+    ],
+    inStock: true,
+    // No reviews on the site yet. The product page hides the rating and omits
+    // the structured-data review block while this is zero -- publishing an
+    // invented rating would be dishonest and breaches Google's review policy.
+    rating: 0,
+    reviewCount: 0
   }
 ];
 

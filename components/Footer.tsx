@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { products } from "@/lib/products";
 
 const WHATSAPP_URL =
   "https://wa.me/918178902630?text=Hi%20VoltLabs!%20I%20have%20a%20question%20about%20your%20products.";
@@ -31,11 +32,17 @@ const Footer = () => (
         <div>
           <h4 className="text-white font-semibold mb-6">Products</h4>
           <ul className="space-y-4">
-            {["RGB Touch Lamp", "Table Touch Lamp", "Spiral Table Lamp", "Coming Soon"].map((item) => (
-              <li key={item}>
-                <a href="#products" className="text-gray-400 hover:text-[#EAA832] transition-colors">{item}</a>
+            {/* Derived from the catalogue so a new product appears here too. */}
+            {products.map((product) => (
+              <li key={product.slug}>
+                <Link href={`/product/${product.slug}`} className="text-gray-400 hover:text-[#EAA832] transition-colors">
+                  {product.name}
+                </Link>
               </li>
             ))}
+            <li>
+              <a href="#products" className="text-gray-400 hover:text-[#EAA832] transition-colors">Coming Soon</a>
+            </li>
           </ul>
         </div>
 
