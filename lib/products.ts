@@ -184,6 +184,57 @@ export const products: Product[] = [
       "Complete Package Included – Comes with the GlowSync SL01 lamp, a USB-C cable and a user manual, plus a 12 month VoltLabs warranty against manufacturing defects."
     ],
     inStock: true
+  },
+  {
+    slug: "ribbed-table-lamp",
+    name: "Ribbed Table Lamp",
+    shortDescription: "Ribbed Shade with 3-Colour LED Bulb - Warm, Natural & Cool White",
+    description: "Elevate your living space with this modern ribbed table lamp, designed to bring warmth and style to any room. It comes with a high-quality E27 LED bulb offering three switchable light colours — warm white for a cosy mood, natural white for everyday use, and cool white for bright, focused light — so you can set the right atmosphere for any moment. The fluted cylindrical shade diffuses the light softly, creating a relaxing, inviting glow that works as a bedside lamp, nightstand light, or accent piece in your living room, office or entryway. The clean contrast between the ribbed white shade and the sleek matte black base gives the lamp a refined, minimalist character that complements Scandinavian, contemporary and modern décor. Its compact cylindrical shape fits neatly on side tables, shelves or desks without overwhelming the space. Setting it up is simple — plug into any standard Indian wall socket and switch on. The LED bulb is energy-saving, long-lasting and easily replaceable if ever needed.",
+    price: 799,
+    originalPrice: 1999,
+    currency: "INR",
+    images: ["/product-lamp-ribbed.jpg"],
+    badge: "Minimalist",
+    features: ["3 Light Colours", "E27 LED Bulb", "Ribbed Shade", "Plug & Play", "Energy Saving", "Made in India", "Modern Design", "Gift Ready"],
+    highlights: [
+      { icon: "modes", title: "3 Light Colours", description: "Warm 3000K, Natural 4000K and Cool 6500K in one bulb" },
+      { icon: "dimmer", title: "Soft Ambient Glow", description: "Fluted shade diffuses the light, with no harsh glare" },
+      { icon: "design", title: "Minimalist Two-Tone", description: "Matte black base with a ribbed white shade" },
+      { icon: "warranty", title: "1 Year Warranty", description: "Covers the lamp, cord, switch and bulb" }
+    ],
+    specifications: [
+      { label: "Model Number", value: "Rbl-mb-001" },
+      { label: "Bulb Base", value: "E27 (replaceable)" },
+      { label: "Light Colours", value: "Warm 3000K, Natural 4000K, Cool 6500K" },
+      { label: "Light Source", value: "LED" },
+      { label: "Power Source", value: "Corded Electric" },
+      { label: "Voltage", value: "220 Volts" },
+      { label: "Wattage", value: "12 Watts" },
+      { label: "Switch Type", value: "In-line Push Button" },
+      { label: "Mounting Type", value: "Tabletop" },
+      { label: "Dimensions", value: "10D × 10W × 20H cm" },
+      { label: "Shade Height", value: "14 cm" },
+      { label: "Weight", value: "250 Grams" },
+      { label: "Finish", value: "Matte" },
+      { label: "Colour", value: "Black and White" },
+      { label: "Shape", value: "Ribbed" },
+      { label: "Base & Shade Material", value: "Plastic" },
+      { label: "In the Box", value: "Lamp (fully assembled), LED bulb, power cord" },
+      { label: "Suitable For", value: "Bedroom, Living Room, Study, Dressing Room" },
+      { label: "Indoor / Outdoor", value: "Indoor" },
+      { label: "Water Resistance", value: "Not water resistant" },
+      { label: "Country of Origin", value: "India" },
+      { label: "Warranty", value: "1 Year" }
+    ],
+    aboutPoints: [
+      "Warm Ambient Glow – The fluted white cylindrical shade diffuses light softly, creating a cosy, relaxing atmosphere perfect for unwinding or reading.",
+      "3 Light Colours in One – Includes a high-quality E27 LED bulb with three switchable modes: Warm White (3000K), Natural White (4000K) and Cool White (6500K), to suit any mood or task. The bulb is easily replaceable if needed.",
+      "Minimalist Two-Tone Design – A sleek matte black base paired with a ribbed white shade, complementing Scandinavian, contemporary and modern home décor.",
+      "Versatile Placement – Ideal as a bedside lamp, nightstand light or accent lamp for your bedroom, living room, office or entryway.",
+      "Easy Plug-In and Energy Saving – Plugs into any standard Indian wall socket (220–240V) with no assembly needed. The energy-efficient LED bulb runs cool and lasts for years.",
+      "Thoughtful Gift – A stylish, functional lighting piece that makes a considered gift for housewarmings, birthdays and festive occasions."
+    ],
+    inStock: true
   }
 ];
 
