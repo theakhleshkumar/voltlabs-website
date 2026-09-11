@@ -190,7 +190,7 @@ export const products: Product[] = [
     name: "Ribbed Table Lamp",
     shortDescription: "Ribbed Shade with 3-Colour LED Bulb - Warm, Natural & Cool White",
     description: "Elevate your living space with this modern ribbed table lamp, designed to bring warmth and style to any room. It comes with a high-quality E27 LED bulb offering three switchable light colours — warm white for a cosy mood, natural white for everyday use, and cool white for bright, focused light — so you can set the right atmosphere for any moment. The fluted cylindrical shade diffuses the light softly, creating a relaxing, inviting glow that works as a bedside lamp, nightstand light, or accent piece in your living room, office or entryway. The clean contrast between the ribbed white shade and the sleek matte black base gives the lamp a refined, minimalist character that complements Scandinavian, contemporary and modern décor. Its compact cylindrical shape fits neatly on side tables, shelves or desks without overwhelming the space. Setting it up is simple — plug into any standard Indian wall socket and switch on. The LED bulb is energy-saving, long-lasting and easily replaceable if ever needed.",
-    price: 799,
+    price: 699,
     originalPrice: 1999,
     currency: "INR",
     images: ["/product-lamp-ribbed.jpg"],
