@@ -153,7 +153,7 @@ export const products: Product[] = [
     name: "GlowSync SL01 Smart RGB Table Lamp",
     shortDescription: "App-Controlled Bedside Lamp with 16 Million Colours, Scenes & Scheduling",
     description: "The VoltLabs GlowSync SL01 is a smart table lamp for people who want light that fits the moment rather than one fixed white bulb. Pair it with the free VoltLabs Android app to pick any shade from the colour wheel, or type exact RGB values when you have found a colour you want back again. Brightness runs from a dim night-light glow up to full reading light. Preset scenes move the lamp between reading, work, relax, movie and party in a single tap, including dynamic modes that fade slowly between colours on their own. Schedules are handled by the lamp itself rather than the phone, so they keep working whether your phone is nearby or not. When you would rather not reach for a phone at all, the touch panel on the base covers on, off, brightness and colour cycling directly. Runs on 5V over USB-C from any standard phone adapter or power bank.",
-    price: 1499,
+    price: 999,
     originalPrice: 2499,
     currency: "INR",
     images: ["/product-lamp-glowsync.jpg"],
