@@ -20,8 +20,6 @@ export interface Product {
   }[];
   aboutPoints?: string[];
   inStock: boolean;
-  rating: number;
-  reviewCount: number;
 }
 
 export const products: Product[] = [
@@ -50,9 +48,7 @@ export const products: Product[] = [
       { label: "Suitable For", value: "Bedroom, Study, Kids Room" },
       { label: "Warranty", value: "1 Year" }
     ],
-    inStock: true,
-    rating: 4.5,
-    reviewCount: 127
+    inStock: true
   },
   {
     slug: "smart-table-touch-lamp",
@@ -97,9 +93,7 @@ export const products: Product[] = [
       "Versatile Smart Lighting – Use as a smart LED table lamp, bedside reading light, study lamp, or ambient night light. Ideal for bedrooms, offices, kids' rooms, and home décor.",
       "Energy-Efficient & Long-Lasting – Built with premium LED technology for soft, flicker-free light and low power consumption. Provides consistent brightness and long life for daily use."
     ],
-    inStock: true,
-    rating: 5.0,
-    reviewCount: 1
+    inStock: true
   },
   {
     slug: "modern-spiral-table-lamp",
@@ -144,9 +138,7 @@ export const products: Product[] = [
       "Energy Efficient & Long Lasting – LED technology consumes less power while offering a longer lifespan. Perfect for everyday use with minimal maintenance.",
       "Perfect Gift Choice – Ideal for birthdays, housewarming, festive gifts and modern home setups. A premium décor accessory for friends, family and office spaces."
     ],
-    inStock: true,
-    rating: 4.4,
-    reviewCount: 2
+    inStock: true
   },
   {
     slug: "glowsync-sl01-smart-rgb-table-lamp",
@@ -191,12 +183,7 @@ export const products: Product[] = [
       "USB-C Powered for Flexible Placement – Operates on 5V through USB-C, so it works with any standard phone adapter or power bank on a desk, bedside table or shelf without needing a dedicated wall socket.",
       "Complete Package Included – Comes with the GlowSync SL01 lamp, a USB-C cable and a user manual, plus a 12 month VoltLabs warranty against manufacturing defects."
     ],
-    inStock: true,
-    // No reviews on the site yet. The product page hides the rating and omits
-    // the structured-data review block while this is zero -- publishing an
-    // invented rating would be dishonest and breaches Google's review policy.
-    rating: 0,
-    reviewCount: 0
+    inStock: true
   }
 ];
 

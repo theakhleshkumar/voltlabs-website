@@ -855,15 +855,6 @@ const jsonLd = {
           : "https://schema.org/OutOfStock",
         seller: { "@type": "Organization", name: "VoltLabs" },
       },
-      ...(product.reviewCount > 0
-        ? {
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: String(product.rating),
-              reviewCount: String(product.reviewCount),
-            },
-          }
-        : {}),
     })),
     {
       "@type": "FAQPage",
